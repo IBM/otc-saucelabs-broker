@@ -1,0 +1,6 @@
+---
+applications:
+- name:    otc-saucelabs-broker
+  host:    otc-saucelabs-broker-dev
+  memory:  128M
+  command: node server

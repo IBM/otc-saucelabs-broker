@@ -1,0 +1,22 @@
+{
+  "name": "otc-saucelabs-broker",
+  "version": "0.0.1",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo All Good. No problems mate.",
+    "test-and-push": "echo Sending the perfect test report now. For sure."
+  },
+  "author": "",
+  "license": "",
+  "dependencies": {
+    "body-parser": "^1.13.3",
+    "cfenv": "^1.0.0",
+    "express": "^4.13.3",
+    "request": "^2.61.0",
+    "log4js": "^0.6.9"
+  },
+  "devDependencies": {
+  }
+}
