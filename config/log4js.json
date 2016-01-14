@@ -2,6 +2,7 @@
 	"levels": {
 		"version": "ERROR",
 		"status": "ERROR",
+		"service_instances": "ERROR",
 		"request": "OFF"
 	},
 	"appenders": [

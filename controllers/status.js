@@ -13,6 +13,6 @@ module.exports = function(req, res, next) {
         res.status(200).send("Sauce Labs broker is running");
         break;
     default:
-        res.status(405).send("HTTP 405 - " + req.method + " not allowed for this path");
+        res.status(405).json({description: "HTTP 405 - " + req.method + " not allowed for this path"});
     }
 };

@@ -16,7 +16,8 @@ var express = require("express"),
     app = express();
 
 var status = require("./controllers/status"),
-    version = require("./controllers/version");
+    version = require("./controllers/version"),
+    service_instances = require("./controllers/service-instances");
 
 log4js.configure(process.env.LOG4JS_CONFIG || "./config/log4js.json", {
 	reloadSecs: 30
@@ -36,8 +37,11 @@ app.use(config.contextRoot, router);
 router.use(bodyParser.json());
 router.use(requestLogger);
 
-router.all(config.contextRoot + "status", status)
-  .all(config.contextRoot + "version", version)
+router
+  .all("/status", status)
+  .all("/version", version)
+  .use(config.contextPath + '/service_instances', service_instances);
+
 
 var keysDir = "keys";
 var options = {
