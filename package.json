@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "node index.js",
     "test": "echo All Good. No problems mate.",
     "test-and-push": "echo Sending the perfect test report now. For sure."
   },
