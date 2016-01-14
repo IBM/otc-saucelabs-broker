@@ -13,6 +13,8 @@ var express = require("express"),
     config = require("./util/config"),
     https = require("https"),
     fs = require("fs"),
+    cfenv = require("cfenv"),
+    appEnv = cfenv.getAppEnv(),
     app = express();
 
 var status = require("./controllers/status"),
@@ -49,8 +51,8 @@ var options = {
   cert: fs.readFileSync(keysDir + "/certificate.pem")
 };
 
-var httpsServer = https.createServer(options, app).listen(config.httpsPort, function(){
-  logger.info("Express server listening on https port " + config.httpsPort);
+var httpsServer = https.createServer(options, app).listen(appEnv.port, function(){
+  logger.info("Sauce Labs broker started at:" + appEnv.url);
 });
 
 module.exports = app;

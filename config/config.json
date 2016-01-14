@@ -1,6 +1,5 @@
 {
 	"contextRoot": "/saucelabs-broker",
 	"contextPath": "/api/v1",
-	"httpsPort": 3002,
 	"dashboardUrl": "https://saucelabs.com/"
 }
