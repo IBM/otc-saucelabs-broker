@@ -2,7 +2,7 @@
   "name": "otc-saucelabs-broker",
   "version": "0.0.1",
   "description": "",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
     "start": "node index.js",
     "test": "echo All Good. No problems mate.",
