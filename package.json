@@ -12,7 +12,6 @@
   "license": "",
   "dependencies": {
     "body-parser": "^1.13.3",
-    "cfenv": "^1.0.0",
     "express": "^4.13.3",
     "request": "^2.61.0",
     "log4js": "^0.6.9"

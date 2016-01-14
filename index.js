@@ -1,43 +1,52 @@
 /*******************************************************************************
  * Licensed Materials - Property of IBM
- * (c) Copyright IBM Corporation 2015. All Rights Reserved.
+ * (c) Copyright IBM Corporation 2016. All Rights Reserved.
  *
  * Note to U.S. Government Users Restricted Rights:
  * Use, duplication or disclosure restricted by GSA ADP Schedule
  * Contract with IBM Corp.
  *******************************************************************************/
- 
-var cfenv = require("cfenv"),
-    express = require("express"),
+
+var express = require("express"),
     log4js = require("log4js"),
     bodyParser = require("body-parser"),
-    routes = require("./routes"),
     config = require("./util/config"),
-    appEnv = cfenv.getAppEnv(),
+    https = require("https"),
+    fs = require("fs"),
     app = express();
 
-//configure logging
-log4js.configure(process.env.LOG4JS_CONFIG || "./assets/log4js.json", {
+var status = require("./controllers/status"),
+    version = require("./controllers/version");
+
+log4js.configure(process.env.LOG4JS_CONFIG || "./config/log4js.json", {
 	reloadSecs: 30
 });
+
 var requestLogger = log4js.connectLogger(log4js.getLogger("request"), { format: ":method :url :status - :response-time ms" });
 
 var logger = log4js.getLogger("server");
 
-app.use(bodyParser.json());
-app.use(requestLogger);
-app.use(function (req, res, next) {
-  if (req.headers['x-forwarded-proto'] && req.headers['x-forwarded-proto'] !== 'https') {
-    return res.status(501).send('https required');
-  }
-  next();
+var router = express.Router({
+  caseSensitive: true,
+  mergeParams: true
 });
-app.use(config.contextRoot + config.contextPath + '/', routes.index);
-app.use(config.contextRoot + '/status', routes.status);
-app.use(config.contextRoot + '/version', routes.version);
 
-app.listen(appEnv.port, function () {
-    logger.info("Server starting on: " + appEnv.url);
+app.use(config.contextRoot, router);
+
+router.use(bodyParser.json());
+router.use(requestLogger);
+
+router.all(config.contextRoot + "status", status)
+  .all(config.contextRoot + "version", version)
+
+var keysDir = "keys";
+var options = {
+  key: fs.readFileSync(keysDir + "/privatekey.pem"),
+  cert: fs.readFileSync(keysDir + "/certificate.pem")
+};
+
+var httpsServer = https.createServer(options, app).listen(config.httpsPort, function(){
+  logger.info("Express server listening on https port " + config.httpsPort);
 });
 
 module.exports = app;
