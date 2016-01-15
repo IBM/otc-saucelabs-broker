@@ -11,7 +11,7 @@ var express = require("express"),
     log4js = require("log4js"),
     bodyParser = require("body-parser"),
     config = require("./util/config"),
-    https = require("https"),
+ //   https = require("https"),
     fs = require("fs"),
     cfenv = require("cfenv"),
     appEnv = cfenv.getAppEnv(),
@@ -34,25 +34,34 @@ var router = express.Router({
   mergeParams: true
 });
 
-app.use(config.contextRoot, router);
-
-router.use(bodyParser.json());
-router.use(requestLogger);
-
 router
-  .all("/status", status)
+  .use(bodyParser.json())
+  .use(requestLogger)
+  .all("/status", status) // status and version at root
   .all("/version", version)
-  .use(config.contextPath + '/service_instances', service_instances);
+  .use(config.contextRoot + config.contextPath + '/service_instances', service_instances);
 
+app  
+  .use(function (req, res, next) {
+    // If a request comes in that appears to be http, reject it.
+    if (req.headers['x-forwarded-proto'] && req.headers['x-forwarded-proto'] !== 'https') {
+      return res.status(501).send('https required');
+    }
+    next();
+  })
+  .use(router)
+  .listen(appEnv.port, function () {
+    logger.info("Sauce Labs broker starting on: " + appEnv.url);
+  });
 
-var keysDir = "keys";
-var options = {
-  key: fs.readFileSync(keysDir + "/privatekey.pem"),
-  cert: fs.readFileSync(keysDir + "/certificate.pem")
-};
+// var keysDir = "keys";
+// var options = {
+//   key: fs.readFileSync(keysDir + "/privatekey.pem"),
+//   cert: fs.readFileSync(keysDir + "/certificate.pem")
+// };
 
-var httpsServer = https.createServer(options, app).listen(appEnv.port, function(){
-  logger.info("Sauce Labs broker started at:" + appEnv.url);
-});
+// var httpsServer = https.createServer(options, app).listen(appEnv.port, function(){
+//   logger.info("Sauce Labs broker started at:" + appEnv.url);
+// });
 
-module.exports = app;
+//module.exports = app;
