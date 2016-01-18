@@ -15,10 +15,12 @@ var express = require("express"),
     fs = require("fs"),
     cfenv = require("cfenv"),
     appEnv = cfenv.getAppEnv(),
-    app = express();
+    app = express(),
+    fetchAuthMiddleware = require("./lib/middleware/fetch-auth");
 
 var status = require("./controllers/status"),
     version = require("./controllers/version"),
+    catalog = require("./controllers/catalog"),
     service_instances = require("./controllers/service-instances");
 
 log4js.configure(process.env.LOG4JS_CONFIG || "./config/log4js.json", {
@@ -37,11 +39,12 @@ var router = express.Router({
 router
   .use(bodyParser.json())
   .use(requestLogger)
-  .all("/status", status) // status and version at root
+  .all("/status", status) // status, version and catalog at root
   .all("/version", version)
+  .all("/catalog", catalog)
   .use(config.contextRoot + config.contextPath + '/service_instances', service_instances);
 
-app  
+app
   .use(function (req, res, next) {
     // If a request comes in that appears to be http, reject it.
     if (req.headers['x-forwarded-proto'] && req.headers['x-forwarded-proto'] !== 'https') {
@@ -50,6 +53,7 @@ app
     next();
   })
   .use(router)
+  .use(fetchAuthMiddleware())
   .listen(appEnv.port, function () {
     logger.info("Sauce Labs broker starting on: " + appEnv.url);
   });
