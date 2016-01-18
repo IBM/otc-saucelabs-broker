@@ -4,11 +4,11 @@
     "brokerName": "saucelabs",
     "services": [
         {
-            "uuid": "ddb9af79-9130-4dc1-a9b0-e02517521910service6",
+            "uuid": "ddb9af79-9130-4dc1-a9b0-e02517521910service10",
             "created_at": "2016-01-14T17:00:07.648Z",
             "updated_at": "2016-01-14T17:00:07.648Z",
-            "description": "Test your apps in the cloud with Sauce Labs",
-            "tags": ["testing"],
+            "description": "Automate continuous integration testing for your project.",
+            "tags": ["code", "manage", "test"],
             "entity": {
                 "unique_id": "saucelabs"
             },
