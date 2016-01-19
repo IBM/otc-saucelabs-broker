@@ -60,29 +60,42 @@ function validateParameters(params){
 	}
 
 }
+function diffArray(a, b) {
+  var seen = [], diff = [];
+  for ( var i = 0; i < b.length; i++)
+      seen[b[i]] = true;
+  for ( var i = 0; i < a.length; i++)
+      if (!seen[a[i]])
+          diff.push(a[i]);
+  return diff;
+}
 
 function patchServiceInstance (req, res) {
-
 	var sid = req.params.sid,
 		tid = req.params.tid,
-		params = ["dashboard_url", "parameters", "binds"],
+		params = ["dashboard_url", "parameters"],
 	    description = "Could not create service instance",
-	    param = null,
+	    paramsToPatch = [],
 	    doc = {};
-	for (var i = 0; i < params.length - 1; i++){
+	for (var i = 0; i < params.length; i++){
 		if (req.body[params[i]]){
-			param = params[i];
-			break;
+			paramsToPatch.push(params[i]);
 		}
 	}
 
-	if (param === "parameters" && !validateParameters(req.body.parameters)){
+	if (paramsToPatch.indexOf("parameters") !== -1 && !validateParameters(req.body.parameters)){
 		res.status(400).json({description: "Could not validate parameters. username and key are required"});
 		return;
 	}
+	var paramsToKeep = [];
 
-	var idx = params.indexOf(param);
-	params.splice(idx, 1);
+	params.forEach(function(key) {
+	    if (-1 === paramsToPatch.indexOf(key)) {
+	        paramsToKeep.push(key);
+	    }
+	}, this);
+
+	paramsToKeep.push("binds");
 
 	db.get(sid, function(err, body) {
 		if (!err) {
@@ -91,7 +104,6 @@ function patchServiceInstance (req, res) {
 	    }
 	    if (tid){
 	    	if (body.binds) {
-
 	    		if (body.binds.indexOf(tid) === -1) {
 					res.status(404).json({description: "No such toolchain bound: " + tid});
 					return;
@@ -102,10 +114,13 @@ function patchServiceInstance (req, res) {
 	    	}
 	    }
 	    doc._id = sid;
-	    for (var i = 0; i < params.length; i++){
-	    	doc[params[i]] = body[params[i]];
+	    for (var i = 0; i < paramsToPatch.length; i++){
+	    	doc[paramsToPatch[i]] = req.body[paramsToPatch[i]];
 	    }
-	    doc[param] = req.body[param];
+	    for (var i = 0; i < paramsToKeep.length; i++){
+	    	doc[paramsToKeep[i]] = body[paramsToKeep[i]];
+	    }
+
 	    db.insert(doc, function(err, body, header) {
 	      if (err) {
 	        res.status(400).json({description: description});
