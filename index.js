@@ -52,8 +52,9 @@ app
     }
     next();
   })
+    .use(fetchAuthMiddleware())
   .use(router)
- // .use(fetchAuthMiddleware())
+
   .listen(appEnv.port, function () {
     logger.info("Sauce Labs broker starting on: " + appEnv.url);
   });
