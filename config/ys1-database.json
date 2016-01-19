@@ -1,12 +1,7 @@
 {
-  "name": "otc-saucelabs-db",
-  "label": "cloudantNoSQLDB",
-  "plan": "Shared",
-  "credentials": {
-    "username": "af18f0c6-9c53-482a-b2d6-1004ab5d63fa-bluemix",
-    "password": "1d638d7ba07f8acb919231c16420cd24cd0fa0710fdb473675d361869e1774dd",
-    "host": "af18f0c6-9c53-482a-b2d6-1004ab5d63fa-bluemix.cloudant.com",
-    "port": 443,
-    "url": "https://af18f0c6-9c53-482a-b2d6-1004ab5d63fa-bluemix:1d638d7ba07f8acb919231c16420cd24cd0fa0710fdb473675d361869e1774dd@af18f0c6-9c53-482a-b2d6-1004ab5d63fa-bluemix.cloudant.com"
-  }
+  "username": "af18f0c6-9c53-482a-b2d6-1004ab5d63fa-bluemix",
+  "password": "1d638d7ba07f8acb919231c16420cd24cd0fa0710fdb473675d361869e1774dd",
+  "host": "af18f0c6-9c53-482a-b2d6-1004ab5d63fa-bluemix.cloudant.com",
+  "port": 443,
+  "url": "https://af18f0c6-9c53-482a-b2d6-1004ab5d63fa-bluemix:1d638d7ba07f8acb919231c16420cd24cd0fa0710fdb473675d361869e1774dd@af18f0c6-9c53-482a-b2d6-1004ab5d63fa-bluemix.cloudant.com"
 }
