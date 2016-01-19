@@ -125,11 +125,7 @@ function patchServiceInstance (req, res) {
 	      if (err) {
 	        res.status(400).json({description: description});
 	      } else {
-	      	res.status(200).json({
-				instance_id: sid,
-				dashboard_url: doc.dashboard_url,
-				parameters: doc.parameters
-			});
+	      	res.status(200).json({});
 	      }
 	    });
 	});
