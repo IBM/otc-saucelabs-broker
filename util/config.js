@@ -13,7 +13,7 @@ module.exports = {
 	contextRoot: process.env.CONTEXT_ROOT || config.contextRoot,
 	contextPath: process.env.CONTEXT_PATH || config.contextPath,
 	buildNumber: process.env.BUILD_NUMBER,
-	dashboardUrl: config.dashboardUrl,
+	dashboardUrl: process.env.DASHBOARD_URL || config.dashboardUrl,
 
 	tiam_url: process.env.TIAM_URL || config.tiam_url,
     tiam_client_id: process.env.TIAM_CLIENT_ID || config.tiam_client_id,

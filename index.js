@@ -11,7 +11,6 @@ var express = require("express"),
     log4js = require("log4js"),
     bodyParser = require("body-parser"),
     config = require("./util/config"),
- //   https = require("https"),
     fs = require("fs"),
     cfenv = require("cfenv"),
     appEnv = cfenv.getAppEnv(),
@@ -44,6 +43,7 @@ router
   .all("/catalog", catalog)
   .use(config.contextRoot + config.contextPath + '/service_instances', service_instances);
 
+
 app
   .use(function (req, res, next) {
     // If a request comes in that appears to be http, reject it.
@@ -53,19 +53,7 @@ app
     next();
   })
   .use(router)
-  .use(fetchAuthMiddleware())
+ // .use(fetchAuthMiddleware())
   .listen(appEnv.port, function () {
     logger.info("Sauce Labs broker starting on: " + appEnv.url);
   });
-
-// var keysDir = "keys";
-// var options = {
-//   key: fs.readFileSync(keysDir + "/privatekey.pem"),
-//   cert: fs.readFileSync(keysDir + "/certificate.pem")
-// };
-
-// var httpsServer = https.createServer(options, app).listen(appEnv.port, function(){
-//   logger.info("Sauce Labs broker started at:" + appEnv.url);
-// });
-
-//module.exports = app;

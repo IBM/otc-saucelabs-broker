@@ -4,5 +4,8 @@
 	"dashboardUrl": "https://saucelabs.com/",
 	"tiam_url": "https://devops-api.stage1.ng.bluemix.net/v1/identity",
 	"tiam_client_id": "saucelabs",
-	"tiam_client_secret": "gTygnYKqLkK1z32jD8PVDZK3sUTVUkzsKUcx5HgpEOQO5O6b2V"
+	"tiam_client_secret": "gTygnYKqLkK1z32jD8PVDZK3sUTVUkzsKUcx5HgpEOQO5O6b2V",
+	"cloudant_username":"",
+	"cloudant_password":"",
+	"db_name": ""
 }
