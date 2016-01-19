@@ -1,0 +1,7 @@
+{
+  "username": "",
+  "password": "",
+  "host": "",
+  "port": 443,
+  "url": "https://MYUSERNAME:MYPASSWORD@MYACCOUNT.cloudant.com"
+}

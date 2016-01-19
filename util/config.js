@@ -9,7 +9,13 @@
 
 var config = require("../config/config.json");
 
+function getDbSettings(env) {
+	return require("../config/" + env + "-database.json");
+}
+
 module.exports = {
+	env: process.env.APPLICATION_ENV || config.env,
+
 	contextRoot: process.env.CONTEXT_ROOT || config.contextRoot,
 	contextPath: process.env.CONTEXT_PATH || config.contextPath,
 	buildNumber: process.env.BUILD_NUMBER,
@@ -19,7 +25,6 @@ module.exports = {
     tiam_client_id: process.env.TIAM_CLIENT_ID || config.tiam_client_id,
     tiam_client_secret: process.env.TIAM_CLIENT_SECRET  || config.tiam_client_secret,
 
-	cloudant_username: process.env.CLOUDANT_USERNAME || config.cloudant_username,
-	cloudant_password: process.env.CLOUDANT_PASSWORD || config.cloudant_password,
 	db_name: process.env.DB_NAME || config.db_name,
+	getDbSettings: getDbSettings
 };

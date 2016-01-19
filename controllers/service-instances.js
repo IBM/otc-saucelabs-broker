@@ -11,9 +11,9 @@ var express = require('express'),
 	request = require('request'),
 	log4js = require("log4js"),
 	config = require('../util/config'),
-	router = express.Router();
-	cloudant_config = {account:config.cloudant_username, password:config.cloudant_password},
-    cloudant = require('cloudant')(cloudant_config),
+	router = express.Router(),
+	dbSettings = config.getDbSettings(config.env),
+    cloudant = require('cloudant')(dbSettings.url),
     db_name = config.db_name,
     db = cloudant.db.use(db_name);
 
