@@ -45,6 +45,22 @@ cloudant.db.get(db_name, function(err, body) {
 	}
 });
 
+function validateParameters(params){
+	var required = ["username","key"];
+	try {
+		var p = JSON.parse(params);
+		for (var i = 0; i < required.length; i++){
+			if (!(p[required[i]] && p[required[i]].length > 0)) {
+				return false;
+			}
+		}
+		return true;
+	} catch (e) {
+		return false;
+	}
+
+}
+
 function patchServiceInstance (req, res) {
 
 	var sid = req.params.sid,
@@ -59,6 +75,12 @@ function patchServiceInstance (req, res) {
 			break;
 		}
 	}
+
+	if (param === "parameters" && !validateParameters(req.body.parameters)){
+		res.status(400).json({description: "Could not validate parameters. username and key are required"});
+		return;
+	}
+
 	var idx = params.indexOf(param);
 	params.splice(idx, 1);
 
@@ -103,7 +125,7 @@ function createOrUpdateServiceInstance (req, res) {
 
 	var sid = req.params.sid,
 		doc = {
-			dashboard_url: req.body.dashboardUrl || config.dashboardUrl,
+			dashboard_url: req.body.dashboard_url || config.dashboardUrl,
 			parameters: req.body.parameters || {}
 	    },
 	    description = "Could not create service instance";
@@ -112,6 +134,19 @@ function createOrUpdateServiceInstance (req, res) {
 		if (!err) {
 	    	doc._rev = body._rev;
 	    	description = "Could not update service instance";
+	    	if (req.body.parameters){
+	    		if (!validateParameters(doc.parameters)){
+					res.status(400).json({description: "Could not validate parameters. username and key are required"});
+					return;
+				}
+	    	} else {
+	    		doc.parameters = body.parameters;
+	    	}
+	    } else {
+	    	if (!validateParameters(doc.parameters)){
+				res.status(400).json({description: "Could not validate parameters. username and key are required"});
+				return;
+			}
 	    }
 	    doc._id = sid;
 	    db.insert(doc, function(err, body, header) {
