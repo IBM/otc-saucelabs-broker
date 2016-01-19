@@ -45,19 +45,11 @@ cloudant.db.get(db_name, function(err, body) {
 	}
 });
 
-function makeGuid() {
-    // slightly simplified. we're giving up 2 bis of randomness by
-    // hardcoding the 8, which should be one of ['8', '9', 'a', 'b']
-    return 'xxxxxxxx-xxxx-4xxx-8xxx-xxxxxxxxxxxx'.replace(/x/g, function(c) {
-        return Math.round(Math.random() * 16).toString(16);
-    });
-}
-
 function patchServiceInstance (req, res) {
 
 	var sid = req.params.sid,
 		tid = req.params.tid,
-		params = ["instance_id", "dashboard_url", "parameters", "binds"],
+		params = ["dashboard_url", "parameters", "binds"],
 	    description = "Could not create service instance",
 	    param = null,
 	    doc = {};
@@ -97,7 +89,7 @@ function patchServiceInstance (req, res) {
 	        res.status(400).json({description: description});
 	      } else {
 	      	res.status(200).json({
-				instance_id: doc.instance_id,
+				instance_id: sid,
 				dashboard_url: doc.dashboard_url,
 				parameters: doc.parameters
 			});
@@ -110,9 +102,7 @@ function patchServiceInstance (req, res) {
 function createOrUpdateServiceInstance (req, res) {
 
 	var sid = req.params.sid,
-		instance_id = makeGuid(),
 		doc = {
-	    	instance_id: req.body.instance_id || instance_id,
 			dashboard_url: req.body.dashboardUrl || config.dashboardUrl,
 			parameters: req.body.parameters || {}
 	    },
@@ -129,7 +119,7 @@ function createOrUpdateServiceInstance (req, res) {
 	        res.status(400).json({description: description});
 	      } else {
 	      	res.status(200).json({
-				instance_id: doc.instance_id,
+				instance_id: sid,
 				dashboard_url: doc.dashboard_url,
 				parameters: doc.parameters
 			});
@@ -159,7 +149,6 @@ function bindServiceInstance (req, res) {
 	    }
 	    binds.push(tid);
 	    doc.binds = binds;
-	    doc.instance_id =  body.instance_id;
 		doc.dashboard_url = body.dashboard_url;
 		doc.parameters = body.parameters;
 	    db.insert(doc, function(err, body, header) {
@@ -205,7 +194,6 @@ function unbindServiceInstanceFromAllToolchains(req, res) {
 			doc._id = sid;
 	    }
 	    doc.binds = [];
-	    doc.instance_id =  body.instance_id;
 		doc.dashboard_url = body.dashboard_url;
 		doc.parameters = body.parameters;
 	    db.insert(doc, function(err, body, header) {
@@ -241,7 +229,6 @@ function unbindServiceInstanceFromToolchain (req, res) {
 	    	binds.splice(idx, 1);
 	    }
 	    doc.binds = binds;
-	    doc.instance_id =  body.instance_id;
 		doc.dashboard_url = body.dashboard_url;
 		doc.parameters = body.parameters;
 	    db.insert(doc, function(err, body, header) {
