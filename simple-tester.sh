@@ -1,3 +1,4 @@
+# remove the line .use(fetchAuthMiddleware()) in index.js before trying to run this
 
 URL=https://otc-saucelabs-broker.stage1.ng.bluemix.net
 
