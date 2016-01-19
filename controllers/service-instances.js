@@ -29,11 +29,18 @@ module.exports = router;
 
 
 cloudant.db.get(db_name, function(err, body) {
-  if (!err) {
-    logger.info("Using database " +  db_name);
-  } else {
-  	logger.error("Failed to get database " + db_name);
-  }
+	if (!err) {
+		logger.info("Using database " +  db_name);
+	} else {
+		cloudant.db.create(db_name, function(err, body) {
+			if (!err) {
+				logger.info('Created database ' + db_name);
+			} else {
+				logger.error("Failed to get/create database " + db_name);
+				logger.error("Make sure cloudant connection parameters and access are correct and try again");
+			}
+		});
+	}
 });
 
 function makeGuid() {
