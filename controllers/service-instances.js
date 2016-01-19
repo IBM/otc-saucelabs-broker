@@ -20,7 +20,9 @@ var express = require('express'),
 var logger = log4js.getLogger("service-instances");
 
 router.put("/:sid", createOrUpdateServiceInstance);
+router.patch("/:sid", patchServiceInstance);
 router.put("/:sid/toolchains/:tid", bindServiceInstance)
+router.patch("/:sid/toolchains/:tid", patchServiceInstance)
 router.delete("/:sid", deleteServiceInstance)
 router.delete("/:sid/toolchains", unbindServiceInstanceFromAllToolchains)
 router.delete("/:sid/toolchains/:tid", unbindServiceInstanceFromToolchain)
@@ -49,6 +51,60 @@ function makeGuid() {
     return 'xxxxxxxx-xxxx-4xxx-8xxx-xxxxxxxxxxxx'.replace(/x/g, function(c) {
         return Math.round(Math.random() * 16).toString(16);
     });
+}
+
+function patchServiceInstance (req, res) {
+
+	var sid = req.params.sid,
+		tid = req.params.tid,
+		params = ["instance_id", "dashboard_url", "parameters", "binds"],
+	    description = "Could not create service instance",
+	    param = null,
+	    doc = {};
+	for (var i = 0; i < params.length - 1; i++){
+		if (req.body[params[i]]){
+			param = params[i];
+			break;
+		}
+	}
+	var idx = params.indexOf(param);
+	params.splice(idx, 1);
+
+	db.get(sid, function(err, body) {
+		if (!err) {
+	    	doc._rev = body._rev;
+	    	description = "Could not update service instance";
+	    }
+	    if (tid){
+	    	if (body.binds) {
+
+	    		if (body.binds.indexOf(tid) === -1) {
+					res.status(404).json({description: "No such toolchain bound: " + tid});
+					return;
+	    		}
+	    	} else {
+				res.status(404).json({description: "No such toolchain bound: " + tid});
+				return;
+	    	}
+	    }
+	    doc._id = sid;
+	    for (var i = 0; i < params.length; i++){
+	    	doc[params[i]] = body[params[i]];
+	    }
+	    doc[param] = req.body[param];
+	    db.insert(doc, function(err, body, header) {
+	      if (err) {
+	        res.status(400).json({description: description});
+	      } else {
+	      	res.status(200).json({
+				instance_id: doc.instance_id,
+				dashboard_url: doc.dashboard_url,
+				parameters: doc.parameters
+			});
+	      }
+	    });
+	});
+	return;
 }
 
 function createOrUpdateServiceInstance (req, res) {
