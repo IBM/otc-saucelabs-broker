@@ -147,6 +147,9 @@ function createOrUpdateServiceInstance (req, res) {
 			}
 	    }
 	    doc._id = sid;
+	    if (body && body.binds){
+	    	doc.binds = body.binds;
+	    }
 	    db.insert(doc, function(err, body, header) {
 	      if (err) {
 	        res.status(400).json({description: description});
