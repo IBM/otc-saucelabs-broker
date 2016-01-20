@@ -15,8 +15,6 @@ curl -k -i -X PUT -d'{}' $URL/saucelabs-broker/api/v1/service_instances/123/tool
 
 curl -k -i -X PATCH -d @patch.json $URL/saucelabs-broker/api/v1/service_instances/123
 
-curl -k -i -X PATCH -d @patch2.json $URL/saucelabs-broker/api/v1/service_instances/123/toolchains/3434
-
 curl -k -i -X DELETE $URL/saucelabs-broker/api/v1/service_instances/123/toolchains/3434
 
 curl -k -i -X DELETE $URL/saucelabs-broker/api/v1/service_instances/123
