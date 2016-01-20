@@ -22,7 +22,6 @@ var logger = log4js.getLogger("service-instances");
 router.put("/:sid", createOrUpdateServiceInstance);
 router.patch("/:sid", patchServiceInstance);
 router.put("/:sid/toolchains/:tid", bindServiceInstance)
-router.patch("/:sid/toolchains/:tid", patchServiceInstance)
 router.delete("/:sid", deleteServiceInstance)
 router.delete("/:sid/toolchains", unbindServiceInstanceFromAllToolchains)
 router.delete("/:sid/toolchains/:tid", unbindServiceInstanceFromToolchain)
@@ -72,7 +71,6 @@ function diffArray(a, b) {
 
 function patchServiceInstance (req, res) {
 	var sid = req.params.sid,
-		tid = req.params.tid,
 		params = ["dashboard_url", "parameters"],
 	    description = "Could not create service instance",
 	    paramsToPatch = [],
@@ -101,17 +99,6 @@ function patchServiceInstance (req, res) {
 		if (!err) {
 	    	doc._rev = body._rev;
 	    	description = "Could not update service instance";
-	    }
-	    if (tid){
-	    	if (body.binds) {
-	    		if (body.binds.indexOf(tid) === -1) {
-					res.status(404).json({description: "No such toolchain bound: " + tid});
-					return;
-	    		}
-	    	} else {
-				res.status(404).json({description: "No such toolchain bound: " + tid});
-				return;
-	    	}
 	    }
 	    doc._id = sid;
 	    for (var i = 0; i < paramsToPatch.length; i++){
