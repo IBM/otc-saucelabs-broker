@@ -14,7 +14,7 @@ var express = require('express'),
 	router = express.Router(),
 	dbSettings = config.getDbSettings(config.env),
     cloudant = require('cloudant')(dbSettings.url),
-    db_name = config.db_name,
+    db_name = dbSettings.db_name,
     db = cloudant.db.use(db_name);
 
 var logger = log4js.getLogger("service-instances");

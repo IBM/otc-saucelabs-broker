@@ -3,5 +3,6 @@
   "password": "",
   "host": "",
   "port": 443,
-  "url": "https://MYUSERNAME:MYPASSWORD@MYACCOUNT.cloudant.com"
+  "url": "https://MYUSERNAME:MYPASSWORD@MYACCOUNT.cloudant.com",
+  "db_name": "sauce"
 }
