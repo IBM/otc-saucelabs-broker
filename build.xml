@@ -129,11 +129,10 @@
          ================================================================== -->
     <property name="project" value="${ant.project.name}"/>
     <property name="build.life.id" value="${env.BUILD_LIFE_ID}"/>
-    <property name="version" value="1.0.0-dev"/>
+    <property name="version" value="1.0.0"/>
 
     <property name="ub.project.name" value="${project}"/>
     <property name="ub.workflow.name" value="Build"/>
-  
     <property name="install.webapp.name" value="ROOT"/>
 
     <!-- ==================================================================
@@ -141,7 +140,7 @@
          ================================================================== -->
     <property name="build.dir" location="build" />
 	<property name="src.dir" location="." />
-    
+
     <!-- ==================================================================
          LOCATIONS OF BUILD ARTIFACTS
          ================================================================== -->
