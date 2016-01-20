@@ -7,13 +7,22 @@
  * Contract with IBM Corp.
  *******************************************************************************/
 
-var config = require("../util/config");
+var config = require("../util/config"),
+	fs = require("fs");
+
+var VERSION;
+
+try {
+	VERSION = JSON.parse(fs.readFileSync("build_info.json", {encoding: "utf-8"}));
+} catch (e) {
+	//ignore any errors, we don't want local startups with an ERROR log
+}
 
 module.exports = function(req, res, next) {
 
     switch(req.method) {
     case "GET":
-            res.status(200).json({build: config.buildNumber || "Unknown"});
+            res.status(200).json(VERSION || {build: "Unknown"});
         break;
     default:
         res.status(405).json({description: "HTTP 405 - " + req.method + " not allowed for this path"});
