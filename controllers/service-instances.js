@@ -47,9 +47,8 @@ cloudant.db.get(db_name, function(err, body) {
 function validateParameters(params){
 	var required = ["username","key"];
 	try {
-		var p = JSON.parse(params);
 		for (var i = 0; i < required.length; i++){
-			if (!(p[required[i]] && p[required[i]].length > 0)) {
+			if (!(params[required[i]] && params[required[i]].length > 0)) {
 				return false;
 			}
 		}
