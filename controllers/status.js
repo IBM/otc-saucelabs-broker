@@ -10,7 +10,7 @@
 module.exports = function(req, res, next) {
     switch(req.method) {
     case "GET":
-        res.status(200).send("Sauce Labs broker is running");
+        res.status(200).send({});
         break;
     default:
         res.status(405).json({description: "HTTP 405 - " + req.method + " not allowed for this path"});
