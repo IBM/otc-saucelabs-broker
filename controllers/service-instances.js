@@ -10,11 +10,11 @@
 
 var express = require("express"),
 	log4js = require("log4js"),
+	url = require("url"),
 	config = require("../util/config"),
 	router = express.Router(),
-	dbSettings = config.getDbSettings(config.env),
-    cloudant = require("cloudant")(dbSettings.url),
-    db_name = dbSettings.db_name,
+    cloudant = require("cloudant")(config.cloudant_url),
+    db_name = config.cloudant_database,
     db = cloudant.db.use(db_name);
 
 var logger = log4js.getLogger("service-instances");
@@ -28,16 +28,16 @@ router.delete("/:sid/toolchains/:tid", unbindServiceInstanceFromToolchain);
 
 module.exports = router;
 
-
 cloudant.db.get(db_name, function(err, body) {
+	var dbInfo = "database " +  db_name +  " on " + url.parse(config.cloudant_url).host;
 	if (!err) {
-		logger.info("Using database " +  db_name);
+		logger.info("Using " + dbInfo);
 	} else {
 		cloudant.db.create(db_name, function(err, body) {
 			if (!err) {
-				logger.info("Created database " + db_name);
+				logger.info("Created database " + dbInfo);
 			} else {
-				logger.error("Failed to get/create database " + db_name);
+				logger.error("Failed to get/create " + dbInfo);
 				logger.error("Make sure cloudant connection parameters and access are correct and try again");
 			}
 		});

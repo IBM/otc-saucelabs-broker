@@ -25,6 +25,6 @@ module.exports = {
     tiam_client_id: process.env.TIAM_CLIENT_ID || config.tiam_client_id,
     tiam_client_secret: process.env.TIAM_CLIENT_SECRET  || config.tiam_client_secret,
 
-	db_name: process.env.DB_NAME || config.db_name,
-	getDbSettings: getDbSettings
+    cloudant_url: process.env.CLOUDANT_URL  || config.cloudant_url,
+    cloudant_database: process.env.CLOUDANT_DATABASE  || config.cloudant_database
 };
