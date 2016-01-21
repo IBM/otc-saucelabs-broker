@@ -6,11 +6,10 @@
  * Use, duplication or disclosure restricted by GSA ADP Schedule
  * Contract with IBM Corp.
  *******************************************************************************/
+"use strict";
 
-var config = require("../util/config"),
-	fs = require("fs");
-
-var VERSION;
+var fs = require("fs"),
+    VERSION;
 
 try {
 	VERSION = JSON.parse(fs.readFileSync("build_info.json", {encoding: "utf-8"}));

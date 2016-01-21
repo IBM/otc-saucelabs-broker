@@ -1,19 +1,19 @@
 /*******************************************************************************
  * Licensed Materials - Property of IBM
- * (c) Copyright IBM Corporation 2015, 2016. All Rights Reserved.
+ * (c) Copyright IBM Corporation 2016. All Rights Reserved.
  *
  * Note to U.S. Government Users Restricted Rights:
  * Use, duplication or disclosure restricted by GSA ADP Schedule
  * Contract with IBM Corp.
  *******************************************************************************/
+"use strict";
 
-var express = require('express'),
-	request = require('request'),
+var express = require("express"),
 	log4js = require("log4js"),
-	config = require('../util/config'),
+	config = require("../util/config"),
 	router = express.Router(),
 	dbSettings = config.getDbSettings(config.env),
-    cloudant = require('cloudant')(dbSettings.url),
+    cloudant = require("cloudant")(dbSettings.url),
     db_name = dbSettings.db_name,
     db = cloudant.db.use(db_name);
 
@@ -21,10 +21,10 @@ var logger = log4js.getLogger("service-instances");
 
 router.put("/:sid", createOrUpdateServiceInstance);
 router.patch("/:sid", patchServiceInstance);
-router.put("/:sid/toolchains/:tid", bindServiceInstance)
-router.delete("/:sid", deleteServiceInstance)
-router.delete("/:sid/toolchains", unbindServiceInstanceFromAllToolchains)
-router.delete("/:sid/toolchains/:tid", unbindServiceInstanceFromToolchain)
+router.put("/:sid/toolchains/:tid", bindServiceInstance);
+router.delete("/:sid", deleteServiceInstance);
+router.delete("/:sid/toolchains", unbindServiceInstanceFromAllToolchains);
+router.delete("/:sid/toolchains/:tid", unbindServiceInstanceFromToolchain);
 
 module.exports = router;
 
@@ -35,7 +35,7 @@ cloudant.db.get(db_name, function(err, body) {
 	} else {
 		cloudant.db.create(db_name, function(err, body) {
 			if (!err) {
-				logger.info('Created database ' + db_name);
+				logger.info("Created database " + db_name);
 			} else {
 				logger.error("Failed to get/create database " + db_name);
 				logger.error("Make sure cloudant connection parameters and access are correct and try again");
@@ -57,15 +57,6 @@ function validateParameters(params){
 		return false;
 	}
 
-}
-function diffArray(a, b) {
-  var seen = [], diff = [];
-  for ( var i = 0; i < b.length; i++)
-      seen[b[i]] = true;
-  for ( var i = 0; i < a.length; i++)
-      if (!seen[a[i]])
-          diff.push(a[i]);
-  return diff;
 }
 
 function patchServiceInstance (req, res) {
@@ -100,10 +91,11 @@ function patchServiceInstance (req, res) {
 	    	description = "Could not update service instance";
 	    }
 	    doc._id = sid;
-	    for (var i = 0; i < paramsToPatch.length; i++){
+	    var i;
+	    for (i = 0; i < paramsToPatch.length; i++){
 	    	doc[paramsToPatch[i]] = req.body[paramsToPatch[i]];
 	    }
-	    for (var i = 0; i < paramsToKeep.length; i++){
+	    for (i = 0; i < paramsToKeep.length; i++){
 	    	doc[paramsToKeep[i]] = body[paramsToKeep[i]];
 	    }
 
@@ -233,7 +225,7 @@ function unbindServiceInstanceFromAllToolchains(req, res) {
 		doc.parameters = body.parameters;
 	    db.insert(doc, function(err, body, header) {
 	      if (err) {
-	        res.status(400).json({description: "Failed to unbind all service instances from toolchain " + tid});
+	        res.status(400).json({description: "Failed to unbind all toolchains from service instances"});
 	      } else {
 			res.status(204).end();
 	      }
@@ -255,8 +247,7 @@ function unbindServiceInstanceFromToolchain (req, res) {
 			doc._id = sid;
 	    }
 	    var binds = body.binds || [],
-	    	idx = binds.indexOf(tid),
-	    	arr = [];
+	    	idx = binds.indexOf(tid);
 	    if (idx === -1) {
 	    	res.status(404).json({description: "No such bound toolchain: " + tid});
 	    	return;

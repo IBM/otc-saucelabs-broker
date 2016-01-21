@@ -1,0 +1,25 @@
+{
+	"unused": "vars",
+	"undef": true,
+	"trailing": true,
+	"camelcase": false,
+	"curly": true,
+	"eqeqeq": true,
+	"expr": true,
+	"forin": false,
+	"immed": true,
+	"quotmark": true,
+	"node": true,
+	"browser": true,
+	"devel": true,
+	"jquery": true,
+	"indent": 4,
+	"validthis":true,
+
+	"globals": {
+		/* AMD */
+		"require": false,
+		"requirejs": false,
+		"define": false
+	}
+}
