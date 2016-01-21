@@ -165,11 +165,7 @@
   "build": "${version}",
   "revision": "${revision}"
 }</echo>
-        <property name="package.excludes" value="build.xml, .*, .*/**, **/node_modules/grunt*/**, **/phantomjs/**, **/selenium-standalone/**, **/wd-sync/**, **/.bin/**/*,config-*.json"/>
-        <delete file="${dist.dir}/${project}.zip"/>
-        <zip destfile="${dist.dir}/${project}.zip" duplicate="fail">
-            <zipfileset dir="${src.dir}" prefix="otc-saucelabs-broker" excludes="${package.excludes}"/>
-        </zip>
+        <property name="package.excludes" value="build.xml, .*, .*/**, **/wd-sync/**, **/.bin/**/*,config-*.json"/>
         <delete file="${dist.dir}/${project}.tar.gz"/>
         <tar destfile="${dist.dir}/${project}.tar.gz" compression="gzip" longfile="gnu">
           <tarfileset dir="${src.dir}" prefix="otc-saucelabs-broker" excludes="${package.excludes}" />
