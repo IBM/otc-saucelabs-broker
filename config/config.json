@@ -5,8 +5,8 @@
 
 	"tiam_url": "https://devops-api.stage1.ng.bluemix.net/v1/identity",
 	"tiam_client_id": "saucelabs",
-	"tiam_client_secret": "gTygnYKqLkK1z32jD8PVDZK3sUTVUkzsKUcx5HgpEOQO5O6b2V",
+	"tiam_client_secret": "",
 
-	"cloudant_url": "https://af18f0c6-9c53-482a-b2d6-1004ab5d63fa-bluemix:1d638d7ba07f8acb919231c16420cd24cd0fa0710fdb473675d361869e1774dd@af18f0c6-9c53-482a-b2d6-1004ab5d63fa-bluemix.cloudant.com",
+	"cloudant_url": "",
 	"cloudant_database": "sauce"
 }
