@@ -145,6 +145,7 @@ function createOrUpdateServiceInstance (req, res) {
 	      if (err) {
 	        res.status(400).json({description: description});
 	      } else {
+	      	doc.parameters.label = doc.parameters.username;
 	      	res.status(200).json({
 				instance_id: sid,
 				dashboard_url: doc.dashboard_url,
