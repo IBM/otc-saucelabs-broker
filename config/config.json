@@ -1,7 +1,7 @@
 {
 	"contextRoot": "/saucelabs-broker",
 	"contextPath": "/api/v1",
-	"dashboardUrl": "https://saucelabs.com/",
+	"dashboardUrl": "https://saucelabs.com/account",
 
 	"tiam_url": "https://devops-api.stage1.ng.bluemix.net/v1/identity",
 	"tiam_client_id": "saucelabs",
