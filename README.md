@@ -35,14 +35,14 @@ LOCAL USAGE
 -----------
 
 	# Grab the code.
-	#
+
 	git clone https://github.ibm.com/org-ids/otc-saucelabs-broker.git
 	cd otc-saucelabs-broker
 
 	On the command line, run:
 
 	export TIAM_CLIENT_SECRET="<saucelabs tiam secret>"
-	export CLOUDANT_URL="https://<accound name>:<password>@<account name>.cloudant.com"
+	export CLOUDANT_URL="https://<account name>:<password>@<account name>.cloudant.com"
 	export CLOUDANT_DATABASE="<a database name>"
 
 	Install the module dependencies by running npm install.
