@@ -9,16 +9,10 @@
 "use strict";
 
 var express = require("express"),
-	log4js = require("log4js"),
-	url = require("url"),
-	config = require("../util/config"),
 	router = express.Router(),
-    cloudant = require("cloudant")(config.cloudant_url),
-    db_name = config.cloudant_database,
-    db = cloudant.db.use(db_name),
-    saucelabs = require("../util/saucelabs");
-
-var logger = log4js.getLogger("service-instances");
+	config = require("../util/config"),
+    saucelabs = require("../util/saucelabs"),
+    database = require("../util/database");
 
 router.put("/:sid", createOrUpdateServiceInstance);
 router.patch("/:sid", patchServiceInstance);
@@ -29,20 +23,8 @@ router.delete("/:sid/toolchains/:tid", unbindServiceInstanceFromToolchain);
 
 module.exports = router;
 
-cloudant.db.get(db_name, function(err, body) {
-	var dbInfo = "database " +  db_name +  " on " + url.parse(config.cloudant_url).host;
-	if (!err) {
-		logger.info("Using " + dbInfo);
-	} else {
-		cloudant.db.create(db_name, function(err, body) {
-			if (!err) {
-				logger.info("Created database " + dbInfo);
-			} else {
-				logger.error("Failed to get/create " + dbInfo);
-				logger.error("Make sure cloudant connection parameters and access are correct and try again");
-			}
-		});
-	}
+database.init(function(status){
+
 });
 
 function validateParameters(params){
@@ -86,7 +68,7 @@ function patchServiceInstance (req, res) {
 
 	paramsToKeep.push("binds");
 
-	db.get(sid, function(err, body) {
+	database.get(sid, function(err, body) {
 		if (!err) {
 	    	doc._rev = body._rev;
 	    	description = "Could not update service instance";
@@ -104,7 +86,7 @@ function patchServiceInstance (req, res) {
 				res.status(401).json({description: "Saucelabs credentials could not be verified"});
 				return;
 	    	}
-		    db.insert(doc, function(err, body, header) {
+		    database.insert(doc, function(err, body, header) {
 		      if (err) {
 		        res.status(400).json({description: description});
 		      } else {
@@ -119,40 +101,57 @@ function patchServiceInstance (req, res) {
 function createOrUpdateServiceInstance (req, res) {
 
 	var sid = req.params.sid,
-		doc = {
-			dashboard_url: req.body.dashboard_url || config.dashboardUrl,
-			parameters: req.body.parameters || {}
-	    },
-	    description = "Could not create service instance";
+	    params = ["dashboard_url", "parameters"],
+	    paramsToPatch = [],
+	    description = "Could not create service instance",
+	    doc = {};
 
-	db.get(sid, function(err, body) {
+	for (var i = 0; i < params.length; i++){
+		if (req.body[params[i]]){
+			paramsToPatch.push(params[i]);
+		}
+	}
+
+	if (paramsToPatch.indexOf("parameters") !== -1 && !validateParameters(req.body.parameters)){
+		res.status(400).json({description: "Could not validate parameters. username and key are required"});
+		return;
+	}
+
+	var paramsToKeep = [];
+
+	params.forEach(function(key) {
+	    if (-1 === paramsToPatch.indexOf(key)) {
+	        paramsToKeep.push(key);
+	    }
+	}, this);
+
+	paramsToKeep.push("binds");
+
+	database.get(sid, function(err, body) {
 		if (!err) {
 	    	doc._rev = body._rev;
 	    	description = "Could not update service instance";
-	    	if (req.body.parameters){
-	    		if (!validateParameters(doc.parameters)){
-					res.status(400).json({description: "Could not validate parameters. username and key are required"});
-					return;
-				}
-	    	} else {
-	    		doc.parameters = body.parameters;
-	    	}
-	    } else {
-	    	if (!validateParameters(doc.parameters)){
-				res.status(400).json({description: "Could not validate parameters. username and key are required"});
-				return;
-			}
 	    }
 	    doc._id = sid;
-	    if (body && body.binds){
-	    	doc.binds = body.binds;
+	    var i;
+	    for (i = 0; i < paramsToPatch.length; i++){
+	    	doc[paramsToPatch[i]] = req.body[paramsToPatch[i]];
 	    }
+	    if (body){
+	    	for (i = 0; i < paramsToKeep.length; i++){
+	    		doc[paramsToKeep[i]] = body[paramsToKeep[i]];
+	    	}
+		} else {
+			if(paramsToKeep.indexOf("dashboard_url") !== -1){
+	    		doc.dashboard_url = config.dashboardUrl;
+	    	}
+		}
 	    saucelabs.validateCredentials(doc.parameters, function(ok){
 	    	if(!ok){
 				res.status(401).json({description: "Saucelabs credentials could not be verified"});
 				return;
 	    	}
-		    db.insert(doc, function(err, body, header) {
+		    database.insert(doc, function(err, body, header) {
 		      if (err) {
 		        res.status(400).json({description: description});
 		      } else {
@@ -174,7 +173,7 @@ function bindServiceInstance (req, res) {
 	var sid = req.params.sid,
 		tid = req.params.tid,
 		doc = {};
-	db.get(sid, function(err, body) {
+	database.get(sid, function(err, body) {
 		if (err) {
 	    	res.status(404).json({description: "No such service instance: " + sid});
 	    	return;
@@ -191,7 +190,7 @@ function bindServiceInstance (req, res) {
 	    doc.binds = binds;
 		doc.dashboard_url = body.dashboard_url;
 		doc.parameters = body.parameters;
-	    db.insert(doc, function(err, body, header) {
+	    database.insert(doc, function(err, body, header) {
 	      if (err) {
 	        res.status(400).json({description: "Failed to bind toolchain " + tid + " to service instance " + sid});
 	      } else {
@@ -204,12 +203,12 @@ function bindServiceInstance (req, res) {
 
 function deleteServiceInstance (req, res) {
 	var sid = req.params.sid;
-	db.get(sid, function(err, body) {
+	database.get(sid, function(err, body) {
 		if (err) {
 	    	res.status(404).json({description: "No such service instance: " + sid});
 	    	return;
 	    } else {
-			db.destroy(sid, body._rev, function(err, body, header) {
+			database.destroy(sid, body._rev, function(err, body, header) {
 				if (err) {
 			    	res.status(500).json({description: "Failed to delete service instance: " + sid});
 			    	return;
@@ -225,7 +224,7 @@ function deleteServiceInstance (req, res) {
 function unbindServiceInstanceFromAllToolchains(req, res) {
 	var sid = req.params.sid,
 		doc = {};
-	db.get(sid, function(err, body) {
+	database.get(sid, function(err, body) {
 		if (err) {
 	    	res.status(404).json({description: "No such service instance: " + sid});
 	    	return;
@@ -236,7 +235,7 @@ function unbindServiceInstanceFromAllToolchains(req, res) {
 	    doc.binds = [];
 		doc.dashboard_url = body.dashboard_url;
 		doc.parameters = body.parameters;
-	    db.insert(doc, function(err, body, header) {
+	    database.insert(doc, function(err, body, header) {
 	      if (err) {
 	        res.status(400).json({description: "Failed to unbind all toolchains from service instances"});
 	      } else {
@@ -251,7 +250,7 @@ function unbindServiceInstanceFromToolchain (req, res) {
 	var sid = req.params.sid,
 		tid = req.params.tid,
 		doc = {};
-	db.get(sid, function(err, body) {
+	database.get(sid, function(err, body) {
 		if (err) {
 	    	res.status(404).json({description: "No such service instance: " + sid});
 	    	return;
@@ -270,7 +269,7 @@ function unbindServiceInstanceFromToolchain (req, res) {
 	    doc.binds = binds;
 		doc.dashboard_url = body.dashboard_url;
 		doc.parameters = body.parameters;
-	    db.insert(doc, function(err, body, header) {
+	    database.insert(doc, function(err, body, header) {
 	      if (err) {
 	        res.status(400).json({description: "Failed to unbind toolchain " + tid + " to service instance " + sid});
 	      } else {
