@@ -15,7 +15,8 @@ var express = require("express"),
 	router = express.Router(),
     cloudant = require("cloudant")(config.cloudant_url),
     db_name = config.cloudant_database,
-    db = cloudant.db.use(db_name);
+    db = cloudant.db.use(db_name),
+    saucelabs = require("../util/saucelabs");
 
 var logger = log4js.getLogger("service-instances");
 
@@ -98,14 +99,19 @@ function patchServiceInstance (req, res) {
 	    for (i = 0; i < paramsToKeep.length; i++){
 	    	doc[paramsToKeep[i]] = body[paramsToKeep[i]];
 	    }
-
-	    db.insert(doc, function(err, body, header) {
-	      if (err) {
-	        res.status(400).json({description: description});
-	      } else {
-	      	res.status(200).json({});
-	      }
-	    });
+		saucelabs.validateCredentials(doc.parameters, function(ok){
+			if(!ok){
+				res.status(401).json({description: "Saucelabs credentials could not be verified"});
+				return;
+	    	}
+		    db.insert(doc, function(err, body, header) {
+		      if (err) {
+		        res.status(400).json({description: description});
+		      } else {
+		      	res.status(200).json({});
+		      }
+		    });
+		});
 	});
 	return;
 }
@@ -141,17 +147,23 @@ function createOrUpdateServiceInstance (req, res) {
 	    if (body && body.binds){
 	    	doc.binds = body.binds;
 	    }
-	    db.insert(doc, function(err, body, header) {
-	      if (err) {
-	        res.status(400).json({description: description});
-	      } else {
-	      	doc.parameters.label = doc.parameters.username;
-	      	res.status(200).json({
-				instance_id: sid,
-				dashboard_url: doc.dashboard_url,
-				parameters: doc.parameters
-			});
-	      }
+	    saucelabs.validateCredentials(doc.parameters, function(ok){
+	    	if(!ok){
+				res.status(401).json({description: "Saucelabs credentials could not be verified"});
+				return;
+	    	}
+		    db.insert(doc, function(err, body, header) {
+		      if (err) {
+		        res.status(400).json({description: description});
+		      } else {
+		      	doc.parameters.label = doc.parameters.username;
+		      	res.status(200).json({
+					instance_id: sid,
+					dashboard_url: doc.dashboard_url,
+					parameters: doc.parameters
+				});
+		      }
+		    });
 	    });
 	});
 	return;
