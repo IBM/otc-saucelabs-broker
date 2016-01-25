@@ -13,25 +13,28 @@ var log4js = require("log4js"),
 	config = require("../util/config"),
     cloudant = require("cloudant")(config.cloudant_url),
     db_name = config.cloudant_database,
-    db = cloudant.db.use(db_name);
+    db = cloudant.db.use(db_name),
+    database_ok = false;
 
 var logger = log4js.getLogger("database");
 
-exports.init = function(callback) {
+exports.init = function() {
 	cloudant.db.get(db_name, function(err, body) {
 		var dbInfo = "database " +  db_name +  " on " + url.parse(config.cloudant_url).host;
 		if (!err) {
 			logger.info("Using " + dbInfo);
-			callback(true);
+			database_ok = true;
+			return true;
 		} else {
 			cloudant.db.create(db_name, function(err, body) {
 				if (!err) {
 					logger.info("Created database " + dbInfo);
-					callback(true);
+					database_ok = true;
+					return true;
 				} else {
 					logger.error("Failed to get/create " + dbInfo);
 					logger.error("Make sure cloudant connection parameters and access are correct and try again");
-					callback(false);
+					return false;
 				}
 			});
 		}
@@ -54,4 +57,22 @@ exports.destroy = function(id, rev, callback) {
 	db.destroy(id, rev, function(err, body, header) {
 		callback(err, body, header);
 	});
+};
+
+exports.validateRead = function(callback){
+	cloudant.db.list(function(err, allDbs) {
+		if (err){
+			callback(false, "Could not read from the database");
+		} else {
+			if (allDbs.indexOf(db_name) !== -1){
+				callback(true);
+			} else {
+				callback(false, "Could not find the database");
+			}
+		}
+	});
+};
+
+exports.isOk = function() {
+	return database_ok;
 };
