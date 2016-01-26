@@ -7,11 +7,8 @@
  * Contract with IBM Corp.
  *******************************************************************************/
 
-var config = require("../config/config.json");
-
-function getDbSettings(env) {
-	return require("../config/" + env + "-database.json");
-}
+var config = require("../config/config.json"),
+	cfenv = require("cfenv");
 
 module.exports = {
 	env: process.env.APPLICATION_ENV || config.env,
@@ -26,5 +23,5 @@ module.exports = {
     tiam_client_secret: process.env.TIAM_CLIENT_SECRET  || config.tiam_client_secret,
 
     cloudant_url: process.env.CLOUDANT_URL  || config.cloudant_url,
-    cloudant_database: process.env.CLOUDANT_DATABASE  || config.cloudant_database
+    cloudant_database: process.env.CLOUDANT_DATABASE  || cfenv.getServiceURL("otc-saucelabs-db") || config.cloudant_database
 };
