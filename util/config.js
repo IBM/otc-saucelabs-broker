@@ -22,6 +22,6 @@ module.exports = {
     tiam_client_id: process.env.TIAM_CLIENT_ID || config.tiam_client_id,
     tiam_client_secret: process.env.TIAM_CLIENT_SECRET  || config.tiam_client_secret,
 
-    cloudant_url: process.env.CLOUDANT_URL  || config.cloudant_url,
-    cloudant_database: process.env.CLOUDANT_DATABASE  || cfenv.getAppEnv().getServiceURL("otc-saucelabs-db") || config.cloudant_database
+    cloudant_url: process.env.CLOUDANT_URL || cfenv.getAppEnv().getServiceURL("otc-saucelabs-db") || config.cloudant_url,
+    cloudant_database: process.env.CLOUDANT_DATABASE || config.cloudant_database
 };
