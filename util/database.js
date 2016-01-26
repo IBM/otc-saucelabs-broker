@@ -41,23 +41,36 @@ exports.init = function() {
 	});
 };
 
-exports.insert = function(doc, callback) {
-	db.insert(doc, function(err, body, header) {
-		callback(err, body, header);
-	});
-};
-
-exports.get = function(id, callback) {
+exports.getDocument = function(id, callback) {
 	db.get(id, function(err, body) {
-		callback(err, body);
+		if (!err && body) {
+			callback(body);
+		} else {
+			callback(null);
+		}
 	});
 };
 
-exports.destroy = function(id, rev, callback) {
-	db.destroy(id, rev, function(err, body, header) {
-		callback(err, body, header);
+exports.insertDocument = function(doc, callback) {
+	db.insert(doc, function(err, body, header) {
+		if (!err && body) {
+			callback(body);
+		} else {
+			callback(null);
+		}
 	});
 };
+
+exports.deleteDocument = function(doc, callback) {
+	db.destroy(doc._id, doc._rev, function(err, body, header) {
+		if (!err && body) {
+			callback(body);
+		} else {
+			callback(null);
+		}
+	});
+};
+
 
 exports.validateRead = function(callback){
 	cloudant.db.list(function(err, allDbs) {
