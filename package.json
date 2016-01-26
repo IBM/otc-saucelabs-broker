@@ -1,15 +1,14 @@
 {
   "name": "otc-saucelabs-broker",
-  "version": "0.0.1",
-  "description": "",
+  "version": "1.0.0",
+  "repository": "https://github.ibm.com/org-ids/otc-saucelabs-broker.git",
+  "license": "",
+  "description": "Open Toolchain Saucelabs Broker",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "test": "echo All Good. No problems mate.",
-    "test-and-push": "echo Sending the perfect test report now. For sure."
+    "start": "node index.js"
   },
-  "author": "",
-  "license": "",
+  "author": "IBM",
   "dependencies": {
     "body-parser": "^1.13.3",
     "express": "^4.13.3",
