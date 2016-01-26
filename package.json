@@ -20,5 +20,6 @@
     "supervisor": "0.7.1"
   },
   "devDependencies": {
+    "supertest": "^1.1.0"
   }
 }
