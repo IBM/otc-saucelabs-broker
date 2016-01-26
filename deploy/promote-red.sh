@@ -10,9 +10,9 @@
 ###############################################################################
 
 
-RED=$CF_APP-red
-GREEN=$CF_APP-green
-GREY=$CF_APP-grey
+RED=${CF_APP}-red
+GREEN=${CF_APP}-green
+GREY=${CF_APP}-grey
 
 # rename current/old app if it exists
 unset OLD_APP_EXISTS

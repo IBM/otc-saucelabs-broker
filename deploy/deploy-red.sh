@@ -10,7 +10,7 @@
 ###############################################################################
 
 
-RED=$CF_APP-red
+RED=${CF_APP}-red
 
 # push the app
 cf push "$RED" -d "$DOMAIN" --no-route --no-start
@@ -21,7 +21,7 @@ cf set-env "$RED" TIAM_CLIENT_SECRET "$TIAM_CLIENT_SECRET"
 # bind the cloudant service instance
 # this will make the url, with credentials, show up as
 # part of the VCAP environment variables
-cf bind-service "$RED" otc-saucelabs-db
+cf bind-service "$RED" "$CLOUDANT_SERVICE_NAME"
 
 # add a red route for testing
 cf map-route "$RED" "$DOMAIN" -n "$RED"
