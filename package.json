@@ -16,7 +16,8 @@
     "log4js": "^0.6.9",
     "cfenv": "^1.0.0",
     "cloudant": "^1.2.0",
-    "saucelabs": "latest"
+    "saucelabs": "latest",
+    "supervisor": "0.7.1"
   },
   "devDependencies": {
   }
