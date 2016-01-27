@@ -9,9 +9,7 @@
 
 
 var request = require("supertest"),
-	fs = require("fs"),
-	config = require("../util/config"),
-	VERSION;
+	config = require("../util/config");
 
 request = request(process.env.TEST_URL);
 
@@ -30,51 +28,7 @@ create.parameters.key = process.env.SAUCELABS_KEY;
 expectedReply.instance_id = sid;
 expectedReply.parameters.label = expectedReply.parameters.username;
 
-/*
- * Test that correct version is tested
- */
-try {
-	VERSION = JSON.parse(fs.readFileSync("build_info.json", {encoding: "utf-8"}));
-	testVersion();
-} catch (e) {
-	throw "No build_info.json found: " + e;
-}
-/*
- * Test /version route
- */
-function testVersion(){
-	request
-		.get("/version")
-		.set("Accept", "application/json")
-		.expect("Content-Type", /json/)
-		.expect(200, VERSION)
-		.end(function(err, res){
-			if (err) {
-				throw err;
-			} else {
-				console.log("Version OK");
-				testStatus();
-			}
-		});
-}
-
-/*
- * Test /status route
- */
-function testStatus() {
-	request
-		.get("/status")
-		.expect(200, {})
-		.end(function(err, res){
-			if (err) {
-				throw err;
-			} else {
-				console.log("Status OK");
-				testPUTCreate();
-			}
-	});
-}
-
+testPUTCreate();
 
 /*
  * Test ../:sid route (PUT/PATCH)
@@ -242,7 +196,7 @@ function testDelete(){
 				throw err;
 			} else {
 				console.log("Delete OK");
-				console.log("All test OK");
+				console.log("All tests OK");
 			}
 		});
 }
