@@ -53,15 +53,25 @@ RUNNING TESTS
 
 	Work in progress.
 
+	build_info.json
+
+	This file is required for test. You can create it by running ./version.sh or
+	saving the json on the /version route on the server you want to test
+
 	Install the dev dependencies
+
+	Running up tests
 
 	On the command line, run:
 
+	node test/up
+
+	Running API test
+
+	Stop the broker
+	On the command line, run:
+
 	export NO_AUTH="true"
-
-	build_info.json
-
-	This file is required for test. You can create it by running ant or saving the json on the /version route on the server you want to test
 
 	start the broker; npm start
 
@@ -72,4 +82,4 @@ RUNNING TESTS
 
 	From the repository top dir, run
 
-	node test/test
+	node test/api
