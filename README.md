@@ -72,6 +72,7 @@ RUNNING TESTS
 	export TEST_URL="<base url to the server>" (local example http://localhost:6001)
 	export SAUCELABS_USERNAME="<your saucelabs username>"
 	export SAUCELABS_KEY="<your saucelabs key>"
+	export ORGANIZATION_GUID="<a valid org id>"
 	export BEARER="<a valid bearer token>"
 
 	From the repository top dir, run

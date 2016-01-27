@@ -25,6 +25,32 @@ module.exports = router;
 
 database.init();
 
+function createOrUpdateServiceInstance (req, res) {
+
+	var sid = req.params.sid,
+	    params = ["dashboard_url", "parameters", "organization_guid"],
+	    paramsToUpdate = [];
+
+	for (var i = 0; i < params.length; i++){
+		if (req.body[params[i]]){
+			paramsToUpdate.push(params[i]);
+		}
+	}
+
+	if (paramsToUpdate.indexOf("parameters") !== -1 && !validateParameters(req.body.parameters)){
+		res.status(400).json({description: "Could not validate parameters. username and key are required"});
+		return;
+	}
+
+	database.getDocument(sid, function(doc){
+		if (doc){
+			updateDocument(doc, req, res, paramsToUpdate);
+		} else {
+			createDocument(req, res, paramsToUpdate);
+		}
+	});
+}
+
 function validateParameters(params){
 	var required = ["username","key"];
 	try {
@@ -55,13 +81,18 @@ function createDocument(req, res, paramsToUpdate) {
 function updateDocument(doc, req, res, paramsToUpdate){
 	var i;
 	for (i = 0; i < paramsToUpdate.length; i++){
-		doc[paramsToUpdate[i]] = req.body[paramsToUpdate[i]];
+		if (paramsToUpdate[i] !== "organization_guid"){
+			doc[paramsToUpdate[i]] = req.body[paramsToUpdate[i]];
+		}
 	}
 	validateAndInsert(doc, req, res);
 }
 
 function validateAndInsert(doc, req, res) {
-    saucelabs.validateCredentials(doc.parameters, function(ok){
+	if(!isValidOrganization(doc.organization_guid, req.user.organizations)) {
+		return res.status(403).json({ "description": "Error: User is not part of the organization." });
+	}
+	saucelabs.validateCredentials(doc.parameters, function(ok){
 		if(!ok){
 			res.status(401).json({description: "Saucelabs credentials could not be verified"});
 			return;
@@ -85,40 +116,15 @@ function validateAndInsert(doc, req, res) {
 	});
 }
 
-function createOrUpdateServiceInstance (req, res) {
-
-	var sid = req.params.sid,
-	    params = ["dashboard_url", "parameters"],
-	    paramsToUpdate = [];
-
-	for (var i = 0; i < params.length; i++){
-		if (req.body[params[i]]){
-			paramsToUpdate.push(params[i]);
-		}
-	}
-
-	if (paramsToUpdate.indexOf("parameters") !== -1 && !validateParameters(req.body.parameters)){
-		res.status(400).json({description: "Could not validate parameters. username and key are required"});
-		return;
-	}
-
-	database.getDocument(sid, function(doc){
-		if (doc){
-			updateDocument(doc, req, res, paramsToUpdate);
-		} else {
-			createDocument(req, res, paramsToUpdate);
-		}
-	});
-}
-
-
-
 function bindServiceInstance (req, res) {
 	var sid = req.params.sid,
 		tid = req.params.tid;
 
 	database.getDocument(sid, function(doc){
 		if (doc){
+			if(!isValidOrganization(doc.organization_guid, req.user.organizations)) {
+				return res.status(403).json({ "description": "Error: User is not part of the organization." });
+			}
 			var binds = doc.binds || [];
 			if (binds.indexOf(tid) !== -1){
 				res.status(400).json({description: "Toolchain " + tid + " already bound to service instance " + sid});
@@ -144,6 +150,9 @@ function deleteServiceInstance (req, res) {
 
 	database.getDocument(sid, function(doc){
 		if (doc){
+			if(!isValidOrganization(doc.organization_guid, req.user.organizations)) {
+				return res.status(403).json({ "description": "Error: User is not part of the organization." });
+			}
 			database.deleteDocument(doc, function(result) {
 				if (result) {
 					res.status(204).end();
@@ -162,6 +171,9 @@ function unbindServiceInstanceFromAllToolchains(req, res) {
 
 	database.getDocument(sid, function(doc){
 		if (doc){
+			if(!isValidOrganization(doc.organization_guid, req.user.organizations)) {
+				return res.status(403).json({ "description": "Error: User is not part of the organization." });
+			}
 			doc.binds = [];
 			database.insertDocument(doc, function(result) {
 				if (result) {
@@ -182,6 +194,9 @@ function unbindServiceInstanceFromToolchain (req, res) {
 
 	database.getDocument(sid, function(doc){
 		if (doc){
+			if(!isValidOrganization(doc.organization_guid, req.user.organizations)) {
+				return res.status(403).json({ "description": "Error: User is not part of the organization." });
+			}
 			var binds = doc.binds || [],
 				idx = binds.indexOf(tid);
 			if (idx === -1) {
@@ -202,4 +217,21 @@ function unbindServiceInstanceFromToolchain (req, res) {
 			res.status(404).json({description: "No such service instance: " + sid});
 		}
 	});
+}
+
+/**
+* Note: Brokers implementing this check should ideally reference an auth-cache.
+* @param orgToValidate - The organization_guid to check the user is a member of.
+* @param usersOrgs - An array of organization_guids the user is actually a member of.
+**/
+function isValidOrganization (orgToValidate, usersOrgs) {
+    if (orgToValidate && usersOrgs) {
+        for (var i = 0; i < usersOrgs.length; i++) {
+            if (usersOrgs[i].guid === orgToValidate) {
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
