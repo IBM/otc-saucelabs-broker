@@ -68,17 +68,11 @@ RUNNING TESTS
 
 	Running API test
 
-	Stop the broker
-	On the command line, run:
-
-	export NO_AUTH="true"
-
-	start the broker; npm start
-
 	New shell, on the command line, run:
 	export TEST_URL="<base url to the server>" (local example http://localhost:6001)
 	export SAUCELABS_USERNAME="<your saucelabs username>"
 	export SAUCELABS_KEY="<your saucelabs key>"
+	export BEARER="<a valid bearer token>"
 
 	From the repository top dir, run
 

@@ -20,7 +20,8 @@ var sid = "TEST",
 		"parameters": {"username":"", "key":""}
 	},
 	baseUrl = config.contextRoot + config.contextPath + "/service_instances/" + sid,
-	expectedReply = create;
+	expectedReply = create,
+	auth = "Bearer " + process.env.BEARER;
 
 create.parameters.username = process.env.SAUCELABS_USERNAME;
 create.parameters.key = process.env.SAUCELABS_KEY;
@@ -36,6 +37,7 @@ testPUTCreate();
 function testPUTCreate(){
 	request
 		.put(baseUrl)
+		.set("Authorization", auth)
 		.set("Accept", "application/json")
 		.send(create)
 		.expect("Content-Type", /json/)
@@ -54,6 +56,7 @@ function testPUTUpdate(){
 	expectedReply.dashboard_url = "http://saucelabs.com/account";
 	request
 		.put(baseUrl)
+		.set("Authorization", auth)
 		.set("Accept", "application/json")
 		.send({"dashboard_url":"http://saucelabs.com/account"})
 		.expect("Content-Type", /json/)
@@ -71,6 +74,7 @@ function testPUTUpdate(){
 function testPATCH(){
 	request
 		.patch(baseUrl)
+		.set("Authorization", auth)
 		.set("Accept", "application/json")
 		.send({"dashboard_url":"http://saucelabs.com/PATCH"})
 		.expect("Content-Type", /json/)
@@ -91,6 +95,7 @@ function testPATCH(){
 function testBind(){
 	request
 		.put(baseUrl + "/toolchains/AAA")
+		.set("Authorization", auth)
 		.expect(204)
 		.end(function(err, res){
 			if (err) {
@@ -108,6 +113,7 @@ function testBind(){
 function testUnbind(){
 	request
 		.delete(baseUrl + "/toolchains/AAA")
+		.set("Authorization", auth)
 		.expect(204)
 		.end(function(err, res){
 			if (err) {
@@ -125,6 +131,7 @@ function testUnbind(){
 function testBind2(){
 	request
 		.put(baseUrl + "/toolchains/AAA")
+		.set("Authorization", auth)
 		.expect(204)
 		.end(function(err, res){
 			if (err) {
@@ -141,6 +148,7 @@ function testBind2(){
 function testBind3(){
 	request
 		.put(baseUrl + "/toolchains/BBB")
+		.set("Authorization", auth)
 		.expect(204)
 		.end(function(err, res){
 			if (err) {
@@ -158,6 +166,7 @@ function testBind3(){
 function testUnbind2(){
 	request
 		.delete(baseUrl + "/toolchains/AAA")
+		.set("Authorization", auth)
 		.expect(204)
 		.end(function(err, res){
 			if (err) {
@@ -174,6 +183,7 @@ function testUnbind2(){
 function testUnbindAll(){
 	request
 		.delete(baseUrl + "/toolchains")
+		.set("Authorization", auth)
 		.expect(204)
 		.end(function(err, res){
 			if (err) {
@@ -190,6 +200,7 @@ function testUnbindAll(){
 function testDelete(){
 	request
 		.delete(baseUrl)
+		.set("Authorization", auth)
 		.expect(204)
 		.end(function(err, res){
 			if (err) {
