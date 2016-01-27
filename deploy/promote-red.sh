@@ -16,7 +16,7 @@ GREY=${CF_APP}-grey
 
 # rename current/old app if it exists
 unset OLD_APP_EXISTS
-if cf app "$CF_APP" >/dev/null 2>&1                     
+if cf app "$GREEN" >/dev/null 2>&1                     
 then
 	OLD_APP_EXISTS=true
 	cf rename "$GREEN" "$GREY"
