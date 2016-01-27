@@ -47,3 +47,29 @@ LOCAL USAGE
 
 	Install the module dependencies by running npm install.
 	Start the node app by running npm start.
+
+RUNNING TESTS
+-------------
+
+	Work in progress.
+
+	Install the dev dependencies
+
+	On the command line, run:
+
+	export NO_AUTH="true"
+
+	build_info.json
+
+	This file is required for test. You can create it by running ant or saving the json on the /version route on the server you want to test
+
+	start the broker; npm start
+
+	New shell, on the command line, run:
+	export TEST_URL="<base url to the server>" (local example http://localhost:6001)
+	export SAUCELABS_USERNAME="<your saucelabs username>"
+	export SAUCELABS_KEY="<your saucelabs key>"
+
+	From the repository top dir, run
+
+	node test/test
