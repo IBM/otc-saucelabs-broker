@@ -51,8 +51,6 @@ LOCAL USAGE
 RUNNING TESTS
 -------------
 
-	Work in progress.
-
 	build_info.json
 
 	This file is required for test. You can create it by running ./version.sh or
@@ -69,14 +67,18 @@ RUNNING TESTS
 	Running API test
 
 	New shell, on the command line, run:
-	export TEST_URL="<base url to the server>" (local example http://localhost:6001)
+	export TEST_URL="<base url to the broker>" (local example http://localhost:6001)
 	export SAUCELABS_USERNAME="<your saucelabs username>"
 	export SAUCELABS_KEY="<your saucelabs key>"
-	export ORGANIZATION_GUID="<a valid org id>"
-	export TOKEN_URL="<base url to the login server>"
+	export ORGANIZATION_GUID="<a valid org id for TEST_USER>"
+	export TOKEN_URL="<base url to the login server>" (example https://login.stage1.ng.bluemix.net)
 	export TEST_USER="<test username>"
 	export TEST_PASSWORD="<test username password>"
 
 	From the repository top dir, run
 
 	node test/api
+
+	and for some reporting:
+
+	node test/api.js | node_modules/tap-xunit/bin/tap-xunit > report.xml
