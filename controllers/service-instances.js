@@ -150,9 +150,9 @@ function deleteServiceInstance (req, res) {
 
 	database.getDocument(sid, function(doc){
 		if (doc){
-			//if(!isValidOrganization(doc.organization_guid, req.user.organizations)) {
-			//	return res.status(403).json({ "description": "Error: User is not part of the organization." });
-			//}
+			if(!isValidOrganization(doc.organization_guid, req.user.organizations)) {
+				return res.status(403).json({ "description": "Error: User is not part of the organization." });
+			}
 			database.deleteDocument(doc, function(result) {
 				if (result) {
 					res.status(204).end();
