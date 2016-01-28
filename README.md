@@ -73,7 +73,9 @@ RUNNING TESTS
 	export SAUCELABS_USERNAME="<your saucelabs username>"
 	export SAUCELABS_KEY="<your saucelabs key>"
 	export ORGANIZATION_GUID="<a valid org id>"
-	export BEARER="<a valid bearer token>"
+	export TOKEN_URL="<base url to the login server>"
+	export TEST_USER="<test username>"
+	export TEST_PASSWORD="<test username password>"
 
 	From the repository top dir, run
 

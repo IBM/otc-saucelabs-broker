@@ -9,7 +9,8 @@
 
 
 var request = require("supertest"),
-	config = require("../util/config");
+	config = require("../util/config"),
+	request2 = require("superagent");
 
 request = request(process.env.TEST_URL);
 
@@ -24,7 +25,7 @@ var sid = "TEST",
 		"dashboard_url": "http://sourcelab.override.config.com",
 		"parameters": {"username":"", "key":""}
 	},
-	auth = "Bearer " + process.env.BEARER;
+	auth = "Bearer ";
 
 create.parameters.username = process.env.SAUCELABS_USERNAME;
 create.parameters.key = process.env.SAUCELABS_KEY;
@@ -35,8 +36,52 @@ expectedReply.parameters.username = process.env.SAUCELABS_USERNAME;
 expectedReply.parameters.key = process.env.SAUCELABS_KEY;
 expectedReply.parameters.label = expectedReply.parameters.username;
 
-testPUTCreate();
+console.log("Tests started");
 
+validateEnv();
+
+function validateEnv(){
+
+	var env = ["TEST_URL", "SAUCELABS_USERNAME","SAUCELABS_KEY","ORGANIZATION_GUID","SAUCELABS_USERNAME","SAUCELABS_KEY","TEST_USER","TEST_PASSWORD","TOKEN_HOST"];
+	for(var i = 0; i < env.length;i++){
+		if (typeof process.env[env[i]] === "undefined"){
+			throw "Missing env var " + env[i];
+		}
+	}
+	fetchToken(function(token){
+		auth += token;
+		testPUTCreate();
+	});
+}
+
+
+
+
+
+function fetchToken(cb) {
+    var formData = {
+        "grant_type": "password"
+    };
+
+    formData.username = process.env.TEST_USER;
+    formData.password = process.env.TEST_PASSWORD;
+
+    request2
+        .post(process.env.TOKEN_HOST + "/UAALoginServerWAR/oauth/token")
+        .type("form")
+    	.set("Authorization", "Basic Y2Y6")
+    	.set("Accept", "application/json")
+    	.send(formData)
+        .end(function (err, res) {
+            if (err){
+                throw err;
+            } else if (!("access_token" in res.body)) {
+            	throw "No access token found";
+            } else {
+            	cb(res.body.access_token);
+            }
+        });
+}
 /*
  * Test ../:sid route (PUT/PATCH)
  */
