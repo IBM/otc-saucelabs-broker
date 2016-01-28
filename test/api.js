@@ -17,6 +17,8 @@ request = request(process.env.TEST_URL);
 
 
 var sid = "TEST",
+	tid1 = "TC1",
+	tid2 = "TC2",
 	baseUrl = config.contextRoot + config.contextPath + "/service_instances/" + sid,
 	create = {
 		"dashboard_url": "http://sourcelab.override.config.com",
@@ -37,7 +39,7 @@ expectedReply.parameters.username = process.env.SAUCELABS_USERNAME;
 expectedReply.parameters.key = process.env.SAUCELABS_KEY;
 expectedReply.parameters.label = expectedReply.parameters.username;
 
-test("Test environment variables", function (t) {
+test("Test that all needed environment variables are defined", function (t) {
 
 	var env = ["TEST_URL", "SAUCELABS_USERNAME","SAUCELABS_KEY","ORGANIZATION_GUID","SAUCELABS_USERNAME","SAUCELABS_KEY","TEST_USER","TEST_PASSWORD","TOKEN_HOST"];
 	var count = 0;
@@ -52,11 +54,7 @@ test("Test environment variables", function (t) {
 	t.end();
 });
 
-
-
-
-
-test("Get authentication token", function (t) {
+test("Get authentication token from " + process.env.TOKEN_HOST, function (t) {
     var formData = {
         "grant_type": "password"
     };
@@ -71,15 +69,15 @@ test("Get authentication token", function (t) {
     	.set("Accept", "application/json")
     	.send(formData)
         .end(function (err, res) {
-        	t.equal(("access_token" in res.body), true);
         	t.equal(err, null);
+        	t.equal(("access_token" in res.body), true);
         	auth += res.body.access_token;
         	t.end();
         });
 });
 
 
-test("Cleanup", function (t) {
+test("Cleanup - remove any old " + sid + " instance", function (t) {
 	request
 		.delete(baseUrl)
 		.set("Authorization", auth)
@@ -89,7 +87,7 @@ test("Cleanup", function (t) {
 });
 
 
-test("PUT (create)", function (t) {
+test("Put (create) " + sid + " instance", function (t) {
 	request
 		.put(baseUrl)
 		.set("Authorization", auth)
@@ -103,7 +101,7 @@ test("PUT (create)", function (t) {
 		});
 });
 
-test("PUT (update)", function (t) {
+test("Put (update) " + sid + " instance", function (t) {
 	create.dashboard_url = "http://saucelabs.com/account";
 	expectedReply.dashboard_url = "http://saucelabs.com/account";
 	request
@@ -119,7 +117,7 @@ test("PUT (update)", function (t) {
 		});
 });
 
-test("PATCH", function (t) {
+test("Patch "  + sid + " instance (dashboard_url)", function (t) {
 	create.dashboard_url = "http://saucelabs.com/PATCH";
 	request
 		.patch(baseUrl)
@@ -137,9 +135,9 @@ test("PATCH", function (t) {
 /*
  * Test ../:sid/toolchains/:tid route (PUT)
  */
-test("Bind", function (t) {
+test("Bind " + tid1 + " toolchain to " + sid, function (t) {
 	request
-		.put(baseUrl + "/toolchains/AAA")
+		.put(baseUrl + "/toolchains/" + tid1)
 		.set("Authorization", auth)
 		.expect(204)
 		.end(function(err, res){
@@ -151,9 +149,9 @@ test("Bind", function (t) {
 /*
  * Test ../:sid/toolchains/:tid route (DELETE)
  */
-test("Unbind", function (t) {
+test("Unbind " + tid1 + " toolchain from " + sid, function (t) {
 	request
-		.delete(baseUrl + "/toolchains/AAA")
+		.delete(baseUrl + "/toolchains/" + tid1)
 		.set("Authorization", auth)
 		.expect(204)
 		.end(function(err, res){
@@ -165,9 +163,9 @@ test("Unbind", function (t) {
 /*
  * Test ../:sid/toolchains/:tid route (PUT)
  */
-test("Bind", function (t) {
+test("Bind " + tid1 + " toolchain to " + sid, function (t) {
 	request
-		.put(baseUrl + "/toolchains/AAA")
+		.put(baseUrl + "/toolchains/" +tid1)
 		.set("Authorization", auth)
 		.expect(204)
 		.end(function(err, res){
@@ -178,9 +176,9 @@ test("Bind", function (t) {
 /*
  * Test ../:sid/toolchains/:tid route (PUT)
  */
-test("Bind", function (t) {
+test("Bind " + tid2 + " toolchain to " + sid, function (t) {
 	request
-		.put(baseUrl + "/toolchains/BBB")
+		.put(baseUrl + "/toolchains/" + tid2)
 		.set("Authorization", auth)
 		.expect(204)
 		.end(function(err, res){
@@ -192,9 +190,9 @@ test("Bind", function (t) {
 /*
  * Test ../:sid/toolchains/:tid route (DELETE)
  */
-test("Unbind", function (t) {
+test("Unbind " + tid1 + " toolchain from " + sid, function (t) {
 	request
-		.delete(baseUrl + "/toolchains/AAA")
+		.delete(baseUrl + "/toolchains/" + tid1)
 		.set("Authorization", auth)
 		.expect(204)
 		.end(function(err, res){
@@ -205,7 +203,7 @@ test("Unbind", function (t) {
 /*
  * Test ../:sid/toolchains route (DELETE)
  */
-test("Unbind all", function (t) {
+test("Unbind all toolchains from " + sid, function (t) {
 	request
 		.delete(baseUrl + "/toolchains")
 		.set("Authorization", auth)
@@ -218,7 +216,7 @@ test("Unbind all", function (t) {
 /*
  * Test ../:sid route (DELETE)
  */
-test("Delete", function (t) {
+test("Delete service instance " + sid, function (t) {
 	request
 		.delete(baseUrl)
 		.set("Authorization", auth)
