@@ -10,7 +10,8 @@
 
 var request = require("supertest"),
 	config = require("../util/config"),
-	request2 = require("superagent");
+	request2 = require("superagent"),
+	test = require("tape");
 
 request = request(process.env.TEST_URL);
 
@@ -36,29 +37,26 @@ expectedReply.parameters.username = process.env.SAUCELABS_USERNAME;
 expectedReply.parameters.key = process.env.SAUCELABS_KEY;
 expectedReply.parameters.label = expectedReply.parameters.username;
 
-console.log("Tests started");
-
-validateEnv();
-
-function validateEnv(){
+test("Test environment variables", function (t) {
 
 	var env = ["TEST_URL", "SAUCELABS_USERNAME","SAUCELABS_KEY","ORGANIZATION_GUID","SAUCELABS_USERNAME","SAUCELABS_KEY","TEST_USER","TEST_PASSWORD","TOKEN_HOST"];
+	var count = 0;
 	for(var i = 0; i < env.length;i++){
 		if (typeof process.env[env[i]] === "undefined"){
-			throw "Missing env var " + env[i];
+			//throw "Missing env var " + env[i];
+		} else {
+			count++;
 		}
 	}
-	fetchToken(function(token){
-		auth += token;
-		testPUTCreate();
-	});
-}
+	t.equal(env.length, count);
+	t.end();
+});
 
 
 
 
 
-function fetchToken(cb) {
+test("Get authentication token", function (t) {
     var formData = {
         "grant_type": "password"
     };
@@ -73,19 +71,25 @@ function fetchToken(cb) {
     	.set("Accept", "application/json")
     	.send(formData)
         .end(function (err, res) {
-            if (err){
-                throw err;
-            } else if (!("access_token" in res.body)) {
-            	throw "No access token found";
-            } else {
-            	cb(res.body.access_token);
-            }
+        	t.equal(("access_token" in res.body), true);
+        	t.equal(err, null);
+        	auth += res.body.access_token;
+        	t.end();
         });
-}
-/*
- * Test ../:sid route (PUT/PATCH)
- */
-function testPUTCreate(){
+});
+
+
+test("Cleanup", function (t) {
+	request
+		.delete(baseUrl)
+		.set("Authorization", auth)
+		.end(function(err, res){
+			t.end();
+		});
+});
+
+
+test("PUT (create)", function (t) {
 	request
 		.put(baseUrl)
 		.set("Authorization", auth)
@@ -94,16 +98,12 @@ function testPUTCreate(){
 		.expect("Content-Type", /json/)
 		.expect(200, expectedReply)
 		.end(function(err, res){
-			if (err) {
-				throw err;
-			} else {
-				console.log("Put (create) OK");
-				testPUTUpdate();
-			}
+			t.equal(err, null);
+            t.end();
 		});
-}
+});
 
-function testPUTUpdate(){
+test("PUT (update)", function (t) {
 	create.dashboard_url = "http://saucelabs.com/account";
 	expectedReply.dashboard_url = "http://saucelabs.com/account";
 	request
@@ -114,16 +114,12 @@ function testPUTUpdate(){
 		.expect("Content-Type", /json/)
 		.expect(200, expectedReply)
 		.end(function(err, res){
-			if (err) {
-				throw err;
-			} else {
-				console.log("Put (update) OK");
-				testPATCH();
-			}
+			t.equal(err, null);
+            t.end();
 		});
-}
+});
 
-function testPATCH(){
+test("PATCH", function (t) {
 	create.dashboard_url = "http://saucelabs.com/PATCH";
 	request
 		.patch(baseUrl)
@@ -133,134 +129,102 @@ function testPATCH(){
 		.expect("Content-Type", /json/)
 		.expect(200, {})
 		.end(function(err, res){
-			if (err) {
-				throw err;
-			} else {
-				console.log("Patch OK");
-				testBind();
-			}
+			t.equal(err, null);
+            t.end();
 		});
-}
+});
 
 /*
  * Test ../:sid/toolchains/:tid route (PUT)
  */
-function testBind(){
+test("Bind", function (t) {
 	request
 		.put(baseUrl + "/toolchains/AAA")
 		.set("Authorization", auth)
 		.expect(204)
 		.end(function(err, res){
-			if (err) {
-				throw err;
-			} else {
-				console.log("Bind OK");
-				testUnbind();
-			}
+			t.equal(err, null);
+            t.end();
 		});
-}
+});
 
 /*
  * Test ../:sid/toolchains/:tid route (DELETE)
  */
-function testUnbind(){
+test("Unbind", function (t) {
 	request
 		.delete(baseUrl + "/toolchains/AAA")
 		.set("Authorization", auth)
 		.expect(204)
 		.end(function(err, res){
-			if (err) {
-				throw err;
-			} else {
-				console.log("Unbind OK");
-				testBind2();
-			}
+			t.equal(err, null);
+            t.end();
 		});
-}
+});
 
 /*
  * Test ../:sid/toolchains/:tid route (PUT)
  */
-function testBind2(){
+test("Bind", function (t) {
 	request
 		.put(baseUrl + "/toolchains/AAA")
 		.set("Authorization", auth)
 		.expect(204)
 		.end(function(err, res){
-			if (err) {
-				throw err;
-			} else {
-				console.log("Bind OK");
-				testBind3();
-			}
+			t.equal(err, null);
+            t.end();
 		});
-}
+});
 /*
  * Test ../:sid/toolchains/:tid route (PUT)
  */
-function testBind3(){
+test("Bind", function (t) {
 	request
 		.put(baseUrl + "/toolchains/BBB")
 		.set("Authorization", auth)
 		.expect(204)
 		.end(function(err, res){
-			if (err) {
-				throw err;
-			} else {
-				console.log("Bind OK");
-				testUnbind2();
-			}
+			t.equal(err, null);
+            t.end();
 		});
-}
+});
 
 /*
  * Test ../:sid/toolchains/:tid route (DELETE)
  */
-function testUnbind2(){
+test("Unbind", function (t) {
 	request
 		.delete(baseUrl + "/toolchains/AAA")
 		.set("Authorization", auth)
 		.expect(204)
 		.end(function(err, res){
-			if (err) {
-				throw err;
-			} else {
-				console.log("Unbind OK");
-				testUnbindAll();
-			}
+			t.equal(err, null);
+            t.end();
 		});
-}
+});
 /*
  * Test ../:sid/toolchains route (DELETE)
  */
-function testUnbindAll(){
+test("Unbind all", function (t) {
 	request
 		.delete(baseUrl + "/toolchains")
 		.set("Authorization", auth)
 		.expect(204)
 		.end(function(err, res){
-			if (err) {
-				throw err;
-			} else {
-				console.log("Unbind all OK");
-				testDelete();
-			}
+			t.equal(err, null);
+            t.end();
 		});
-}
+});
 /*
  * Test ../:sid route (DELETE)
  */
-function testDelete(){
+test("Delete", function (t) {
 	request
 		.delete(baseUrl)
 		.set("Authorization", auth)
 		.expect(204)
 		.end(function(err, res){
-			if (err) {
-				throw err;
-			} else {
-				console.log("Delete OK");
-				console.log("All tests OK");
-			}
+			t.equal(err, null);
+            t.end();
 		});
-}
+});
