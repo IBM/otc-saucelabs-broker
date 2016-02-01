@@ -11,6 +11,9 @@
 var SauceLabs = require("saucelabs");
 
 exports.validateCredentials = function(creds, callback) {
+  if (typeof creds === "undefined"){
+    return callback(false);
+  }
 	var account = new SauceLabs({
 	  username: creds.username,
 	  password: creds.key

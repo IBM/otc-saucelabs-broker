@@ -132,9 +132,6 @@ test("Patch "  + sid + " instance (dashboard_url)", function (t) {
 		});
 });
 
-/*
- * Test ../:sid/toolchains/:tid route (PUT)
- */
 test("Bind " + tid1 + " toolchain to " + sid, function (t) {
 	request
 		.put(baseUrl + "/toolchains/" + tid1)
@@ -146,9 +143,6 @@ test("Bind " + tid1 + " toolchain to " + sid, function (t) {
 		});
 });
 
-/*
- * Test ../:sid/toolchains/:tid route (DELETE)
- */
 test("Unbind " + tid1 + " toolchain from " + sid, function (t) {
 	request
 		.delete(baseUrl + "/toolchains/" + tid1)
@@ -160,9 +154,6 @@ test("Unbind " + tid1 + " toolchain from " + sid, function (t) {
 		});
 });
 
-/*
- * Test ../:sid/toolchains/:tid route (PUT)
- */
 test("Bind " + tid1 + " toolchain to " + sid, function (t) {
 	request
 		.put(baseUrl + "/toolchains/" +tid1)
@@ -173,9 +164,7 @@ test("Bind " + tid1 + " toolchain to " + sid, function (t) {
             t.end();
 		});
 });
-/*
- * Test ../:sid/toolchains/:tid route (PUT)
- */
+
 test("Bind " + tid2 + " toolchain to " + sid, function (t) {
 	request
 		.put(baseUrl + "/toolchains/" + tid2)
@@ -187,9 +176,6 @@ test("Bind " + tid2 + " toolchain to " + sid, function (t) {
 		});
 });
 
-/*
- * Test ../:sid/toolchains/:tid route (DELETE)
- */
 test("Unbind " + tid1 + " toolchain from " + sid, function (t) {
 	request
 		.delete(baseUrl + "/toolchains/" + tid1)
@@ -200,9 +186,7 @@ test("Unbind " + tid1 + " toolchain from " + sid, function (t) {
             t.end();
 		});
 });
-/*
- * Test ../:sid/toolchains route (DELETE)
- */
+
 test("Unbind all toolchains from " + sid, function (t) {
 	request
 		.delete(baseUrl + "/toolchains")
@@ -213,9 +197,7 @@ test("Unbind all toolchains from " + sid, function (t) {
             t.end();
 		});
 });
-/*
- * Test ../:sid route (DELETE)
- */
+
 test("Delete service instance " + sid, function (t) {
 	request
 		.delete(baseUrl)
@@ -223,6 +205,76 @@ test("Delete service instance " + sid, function (t) {
 		.expect(204)
 		.end(function(err, res){
 			t.equal(err, null);
+            t.end();
+		});
+});
+
+test("Put (create) " + sid + " instance with wrong saucelabs credentials", function (t) {
+	create.parameters.username = "foobar";
+	request
+		.put(baseUrl)
+		.set("Authorization", auth)
+		.set("Accept", "application/json")
+		.send(create)
+		.expect("Content-Type", /json/)
+		.expect(400)
+		.end(function(err, res){
+			t.equal(err, null);
+			create.parameters.username = process.env.SAUCELABS_USERNAME;
+            t.end();
+		});
+});
+
+test("Put (create) " + sid + " instance with missing parameters", function (t) {
+	delete create.parameters;
+	request
+		.put(baseUrl)
+		.set("Authorization", auth)
+		.set("Accept", "application/json")
+		.send(create)
+		.expect("Content-Type", /json/)
+		.expect(400)
+		.end(function(err, res){
+			t.equal(err, null);
+			create.parameters = {};
+			create.parameters.username = process.env.SAUCELABS_USERNAME;
+			create.parameters.key = process.env.SAUCELABS_KEY;
+            t.end();
+		});
+});
+
+test("Put (create) " + sid + " instance with empty parameters", function (t) {
+	create.parameters.username = "";
+	create.parameters.key = "";
+	request
+		.put(baseUrl)
+		.set("Authorization", auth)
+		.set("Accept", "application/json")
+		.send(create)
+		.expect("Content-Type", /json/)
+		.expect(400)
+		.end(function(err, res){
+			t.equal(err, null);
+			create.parameters = {};
+			create.parameters.username = process.env.SAUCELABS_USERNAME;
+			create.parameters.key = process.env.SAUCELABS_KEY;
+            t.end();
+		});
+});
+
+
+test("Put (create) " + sid + " instance with invalid organization_guid", function (t) {
+	create.organization_guid = "foobar";
+	request
+		.put(baseUrl)
+		.set("Authorization", auth)
+		.set("Accept", "application/json")
+		.send(create)
+		.expect("Content-Type", /json/)
+		.expect(403)
+		.end(function(err, res){
+			t.equal(err, null);
+			create.organization_guid = process.env.ORGANIZATION_GUID;
             t.end();
 		});
 });
