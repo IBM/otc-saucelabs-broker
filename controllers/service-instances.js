@@ -94,7 +94,7 @@ function validateAndInsert(doc, req, res) {
 	}
 	saucelabs.validateCredentials(doc.parameters, function(ok){
 		if(!ok){
-			res.status(401).json({description: "Saucelabs credentials could not be verified"});
+			res.status(400).json({description: "Saucelabs credentials could not be verified"});
 			return;
 		}
 	    database.insertDocument(doc, function(result) {
