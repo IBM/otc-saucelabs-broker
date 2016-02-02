@@ -86,7 +86,6 @@ test("Cleanup - remove any old " + sid + " instance", function (t) {
 		});
 });
 
-
 test("Put (create) " + sid + " instance", function (t) {
 	request
 		.put(baseUrl)
@@ -275,6 +274,87 @@ test("Put (create) " + sid + " instance with invalid organization_guid", functio
 		.end(function(err, res){
 			t.equal(err, null);
 			create.organization_guid = process.env.ORGANIZATION_GUID;
+            t.end();
+		});
+});
+
+test("Delete non existing service instance " + sid + "x", function (t) {
+	request
+		.delete(baseUrl + "x")
+		.set("Authorization", auth)
+		.expect(404)
+		.end(function(err, res){
+			t.equal(err, null);
+            t.end();
+		});
+});
+
+test("Put (create) " + sid + " instance", function (t) {
+	create.dashboard_url = "http://saucelabs.com/account"
+	request
+		.put(baseUrl)
+		.set("Authorization", auth)
+		.set("Accept", "application/json")
+		.send(create)
+		.expect("Content-Type", /json/)
+		.expect(200, expectedReply)
+		.end(function(err, res){
+			t.equal(err, null);
+            t.end();
+		});
+});
+
+test("Bind " + tid1 + " toolchain to non existing service instance " + sid + "x", function (t) {
+	request
+		.put(baseUrl + "x" + "/toolchains/" + tid1)
+		.set("Authorization", auth)
+		.expect(404)
+		.end(function(err, res){
+			t.equal(err, null);
+            t.end();
+		});
+});
+
+test("Bind " + tid1 + " toolchain to service instance " + sid, function (t) {
+	request
+		.put(baseUrl + "/toolchains/" + tid1)
+		.set("Authorization", auth)
+		.expect(204)
+		.end(function(err, res){
+			t.equal(err, null);
+            t.end();
+		});
+});
+
+test("Bind already bound " + tid1 + " toolchain to service instance " + sid, function (t) {
+	request
+		.put(baseUrl + "/toolchains/" + tid1)
+		.set("Authorization", auth)
+		.expect(400)
+		.end(function(err, res){
+			t.equal(err, null);
+            t.end();
+		});
+});
+
+test("Unbind not bound " + tid1 + "x" + " toolchain from " + sid, function (t) {
+	request
+		.delete(baseUrl + "/toolchains/" + tid1 + "x")
+		.set("Authorization", auth)
+		.expect(404)
+		.end(function(err, res){
+			t.equal(err, null);
+            t.end();
+		});
+});
+
+test("Delete service instance " + sid, function (t) {
+	request
+		.delete(baseUrl)
+		.set("Authorization", auth)
+		.expect(204)
+		.end(function(err, res){
+			t.equal(err, null);
             t.end();
 		});
 });
