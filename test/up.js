@@ -14,6 +14,8 @@ var request = require("supertest"),
 
 request = request(process.env.TEST_URL);
 
+console.log("");
+console.log("Starting deploy tests...");
 /*
  * Test that correct version is tested
  */
@@ -36,7 +38,7 @@ function testVersion(){
 			if (err) {
 				throw err;
 			} else {
-				console.log("Version OK");
+				console.log("- Version OK");
 				testStatus();
 			}
 		});
@@ -53,7 +55,7 @@ function testStatus() {
 			if (err) {
 				throw err;
 			} else {
-				console.log("Status OK");
+				console.log("- Status OK");
 				console.log("Deploy tests OK");
 			}
 	});
