@@ -12,7 +12,9 @@ var express = require("express"),
 	router = express.Router(),
 	config = require("../util/config"),
     saucelabs = require("../util/saucelabs"),
-    database = require("../util/database");
+    database = require("../util/database"),
+    log4js = require("log4js"),
+    logger = log4js.getLogger("service-instance");
 
 router.put("/:sid", createOrUpdateServiceInstance);
 router.patch("/:sid", createOrUpdateServiceInstance);
@@ -214,7 +216,8 @@ function unbindServiceInstanceFromToolchain (req, res) {
 				}
 			});
 		} else {
-			res.status(404).json({description: "No such service instance: " + sid});
+			res.status(204).end();
+			logger.error("Unbind - No such service instance: " + sid + " (command ignored)");
 		}
 	});
 }
