@@ -17,6 +17,10 @@ USAGE
 -----
 
 	# Implemented Endpoints
+	GET /version
+		Version info including build time and git info
+	GET /status
+		Up status (server up and database read check)
 	PUT /saucelabs-broker/api/v1/service_instances/:sid
 		Creates or updates the service instance.
 	PATCH /saucelabs-broker/api/v1/service_instances/:sid
