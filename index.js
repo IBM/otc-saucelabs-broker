@@ -19,7 +19,6 @@ var express = require("express"),
 
 var appstatus = require("./controllers/status"),
     version = require("./controllers/version"),
-    catalog = require("./controllers/catalog"),
     service_instances = require("./controllers/service-instances");
 
 log4js.configure(process.env.LOG4JS_CONFIG || "./config/log4js.json", {
@@ -40,7 +39,6 @@ router
   .use(requestLogger)
   .all("/status", appstatus)
   .all("/version", version)
-  .all("/catalog", catalog)
   .use(config.contextRoot + config.contextPath + "/service_instances", service_instances);
 
 
