@@ -12,6 +12,6 @@
 cat <<END > build_info.json                                       
 {                                        
   "time": "$(date +"%Y-%m-%d %H:%M:%S %z")",
-  "revision": "$(git rev-parse HEAD)"
+  "build": "$(git rev-parse HEAD)"
 }
 END
