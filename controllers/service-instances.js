@@ -112,6 +112,7 @@ function validateAndInsert(doc, req, res) {
 				}
 				res.status(200).json(json);
 			} else {
+				logger.error("Could not write to database");
 				res.status(400).json({description: "Could not write to database"});
 			}
 	    });
@@ -129,6 +130,7 @@ function bindServiceInstance (req, res) {
 			}
 			var binds = doc.binds || [];
 			if (binds.indexOf(tid) !== -1){
+				logger.error("Toolchain " + tid + " already bound to service instance " + sid);
 				res.status(400).json({description: "Toolchain " + tid + " already bound to service instance " + sid});
 				return;
 			}
@@ -138,10 +140,12 @@ function bindServiceInstance (req, res) {
 				if (result) {
 					res.status(204).end();
 				} else {
+					logger.error("Failed to bind toolchain " + tid + " to service instance " + sid);
 					res.status(400).json({description: "Failed to bind toolchain " + tid + " to service instance " + sid});
 				}
 			});
 		} else {
+			logger.error("Bind - no such service instance: " + sid);
 			res.status(404).json({description: "No such service instance: " + sid});
 		}
 	});
@@ -159,10 +163,12 @@ function deleteServiceInstance (req, res) {
 				if (result) {
 					res.status(204).end();
 				} else {
+					logger.error("Failed to delete service instance: " + sid);
 					res.status(500).json({description: "Failed to delete service instance: " + sid});
 				}
 			});
 		} else {
+			logger.error("Delete - No such service instance: " + sid);
 			res.status(404).json({description: "No such service instance: " + sid});
 		}
 	});
@@ -181,10 +187,12 @@ function unbindServiceInstanceFromAllToolchains(req, res) {
 				if (result) {
 					res.status(204).end();
 				} else {
-					res.status(400).json({description: "Failed to unbind all toolchains from service instances"});
+					logger.error("Failed to unbind all toolchains from service instance " + sid);
+					res.status(400).json({description: "Failed to unbind all toolchains from service instance"});
 				}
 			});
 		} else {
+			logger.error("No such service instance: " + sid);
 			res.status(404).json({description: "No such service instance: " + sid});
 		}
 	});
@@ -202,6 +210,7 @@ function unbindServiceInstanceFromToolchain (req, res) {
 			var binds = doc.binds || [],
 				idx = binds.indexOf(tid);
 			if (idx === -1) {
+				logger.error("No such bound toolchain: " + tid + " for service instance " +sid);
 				res.status(404).json({description: "No such bound toolchain: " + tid});
 				return;
 			} else {
@@ -212,12 +221,13 @@ function unbindServiceInstanceFromToolchain (req, res) {
 				if (result) {
 					res.status(204).end();
 				} else {
+					logger.error("Failed to unbind toolchain " + tid + " to service instance " + sid);
 					res.status(400).json({description: "Failed to unbind toolchain " + tid + " to service instance " + sid});
 				}
 			});
 		} else {
-			res.status(204).end();
 			logger.error("Unbind - No such service instance: " + sid + " (command ignored)");
+			res.status(204).end();
 		}
 	});
 }
@@ -235,6 +245,6 @@ function isValidOrganization (orgToValidate, usersOrgs) {
             }
         }
     }
-
+	logger.error("User is not part of the organization: " + orgToValidate);
     return false;
 }

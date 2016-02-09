@@ -8,10 +8,13 @@
  *******************************************************************************/
 "use strict";
 
-var SauceLabs = require("saucelabs");
+var SauceLabs = require("saucelabs"),
+  log4js = require("log4js"),
+  logger = log4js.getLogger("saucelabs");
 
 exports.validateCredentials = function(creds, callback) {
   if (typeof creds === "undefined"){
+    logger.error("Tried to validate undefined credentials");
     return callback(false);
   }
 	var account = new SauceLabs({
@@ -20,9 +23,11 @@ exports.validateCredentials = function(creds, callback) {
 	});
 	account.getAccountDetails(function (err, res) {
   		if (err){
+        logger.error("Failed to validate saucelabs credentials");
   			callback(false);
   		} else {
   			if (typeof res === "undefined"){
+          logger.error("Failed to validate saucelabs credentials: response undefined");
   				callback(false);
   			} else {
   				callback(true);
