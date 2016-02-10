@@ -11,12 +11,12 @@
   "author": "IBM",
   "dependencies": {
     "body-parser": "^1.13.3",
-    "express": "^4.13.3",
-    "request": "^2.61.0",
-    "log4js": "^0.6.9",
     "cfenv": "^1.0.0",
     "cloudant": "^1.2.0",
-    "saucelabs": "latest",
+    "express": "^4.13.3",
+    "log4js": "^0.6.9",
+    "request": "^2.61.0",
+    "saucelabs": "^1.0.1",
     "supervisor": "0.7.1"
   },
   "devDependencies": {
