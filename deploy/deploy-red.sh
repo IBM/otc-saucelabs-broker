@@ -13,7 +13,7 @@
 RED=${CF_APP}-red
 
 # push the app
-cf push "$RED" -d "$DOMAIN" --no-route --no-start
+cf push "$RED" -d "$DOMAIN" -m 1G --no-route --no-start
 
 # set the tiam client secret
 cf set-env "$RED" TIAM_CLIENT_SECRET "$TIAM_CLIENT_SECRET"
