@@ -53,7 +53,8 @@ module.exports = function() {
 			if (requestPath === "/version" || requestPath === "/status"){
 				next();
 			} else {
-				return res.status(401).json({description: "An invalid authorization header was passed in."});
+				next();
+				//return res.status(401).json({description: "An invalid authorization header was passed in."});
 			}
 		}
 	};
