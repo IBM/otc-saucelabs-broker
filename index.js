@@ -13,9 +13,9 @@ var express = require("express"),
     bodyParser = require("body-parser"),
     config = require("./util/config"),
     cfenv = require("cfenv"),
+    authentication = require("./util/authentication"),
     appEnv = cfenv.getAppEnv(),
-    app = express(),
-    fetchAuthMiddleware = require("./lib/middleware/fetch-auth");
+    app = express();
 
 var appstatus = require("./controllers/status"),
     version = require("./controllers/version"),
@@ -50,7 +50,7 @@ app
     }
     next();
   })
-  .use(fetchAuthMiddleware())
+  .use(authentication())
   .use(router)
   .listen(appEnv.port, function () {
     logger.info("Sauce Labs broker starting on: " + appEnv.url);

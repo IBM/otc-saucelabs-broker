@@ -6,6 +6,7 @@
 	"tiam_url": "https://devops-api.stage1.ng.bluemix.net/v1/identity",
 	"tiam_client_id": "saucelabs",
 	"tiam_client_secret": "",
+	"otc_api_broker_secret":"",
 
 	"cloudant_url": "",
 	"cloudant_database": "sauce"

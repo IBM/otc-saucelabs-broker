@@ -10,7 +10,6 @@
 
 var request = require("supertest"),
 	config = require("../util/config"),
-	request2 = require("superagent"),
 	test = require("tape");
 
 request = request(process.env.TEST_URL);
@@ -28,7 +27,10 @@ var sid = "TEST",
 		"dashboard_url": "http://sourcelab.override.config.com",
 		"parameters": {"username":"", "key":""}
 	},
-	auth = "Bearer ";
+	auth = "Basic " + new Buffer(config.tiam_client_id + ":" + config.otc_api_broker_secret).toString("base64");
+
+
+
 
 create.parameters.username = process.env.SAUCELABS_USERNAME;
 create.parameters.key = process.env.SAUCELABS_KEY;
@@ -54,28 +56,6 @@ test("Setup and test preparation", function (tst) {
 		}
 		t.equal(env.length, count);
 		t.end();
-	});
-
-	tst.test("Get authentication token from " + process.env.TOKEN_HOST, function (t) {
-	    var formData = {
-	        "grant_type": "password"
-	    };
-
-	    formData.username = process.env.TEST_USER;
-	    formData.password = process.env.TEST_PASSWORD;
-
-	    request2
-	        .post(process.env.TOKEN_HOST + "/UAALoginServerWAR/oauth/token")
-	        .type("form")
-	    	.set("Authorization", "Basic Y2Y6")
-	    	.set("Accept", "application/json")
-	    	.send(formData)
-	        .end(function (err, res) {
-	        	t.equal(err, null);
-	        	t.equal(("access_token" in res.body), true);
-	        	auth += res.body.access_token;
-	        	t.end();
-	        });
 	});
 
 	tst.test("Cleanup - remove any old " + sid + " instance", function (t) {
@@ -262,23 +242,6 @@ test("Test errors operation", function (tst) {
 				create.parameters = {};
 				create.parameters.username = process.env.SAUCELABS_USERNAME;
 				create.parameters.key = process.env.SAUCELABS_KEY;
-	            t.end();
-			});
-	});
-
-
-	tst.test("Put (create) " + sid + " instance with invalid organization_guid", function (t) {
-		create.organization_guid = "foobar";
-		request
-			.put(baseUrl)
-			.set("Authorization", auth)
-			.set("Accept", "application/json")
-			.send(create)
-			.expect("Content-Type", /json/)
-			.expect(403)
-			.end(function(err, res){
-				t.equal(err, null);
-				create.organization_guid = process.env.ORGANIZATION_GUID;
 	            t.end();
 			});
 	});
