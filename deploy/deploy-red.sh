@@ -16,7 +16,7 @@ RED=${CF_APP}-red
 cf push "$RED" -d "$DOMAIN" -m 1G --no-route --no-start
 
 # set the tiam client secret
-cf set-env "$RED" TIAM_CLIENT_SECRET "$TIAM_CLIENT_SECRET"
+cf set-env "$RED" OTC_API_BROKER_SECRET "$OTC_API_BROKER_SECRET"
 
 # bind the cloudant service instance
 # this will make the url, with credentials, show up as
