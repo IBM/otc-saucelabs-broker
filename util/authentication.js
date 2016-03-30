@@ -41,7 +41,7 @@ module.exports = function() {
 					secret = creds[1];
 				} catch (e) {}
 				if (id !== config.tiam_client_id || secret !== config.otc_api_broker_secret) {
-					logger.debug("Invalid Basic Credentials provided");
+					logger.debug("Invalid Basic Credentials provided " + config.otc_api_broker_secret.length);
 					return res.status(401).json({description: "An invalid authorization header was passed in."});
 				}
 				return next();
