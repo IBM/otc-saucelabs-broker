@@ -17,6 +17,8 @@ cf push "$RED" -d "$DOMAIN" -m 1G --no-route --no-start
 
 # set the tiam client secret
 cf set-env "$RED" OTC_API_BROKER_SECRET "$OTC_API_BROKER_SECRET"
+cf set-env "$RED" NEW_RELIC_LICENSE_KEY "$NEW_RELIC_LICENSE_KEY"
+cf set-env "$RED" NEW_RELIC_APP_NAME "$NEW_RELIC_APP_NAME"
 
 # bind the cloudant service instance
 # this will make the url, with credentials, show up as

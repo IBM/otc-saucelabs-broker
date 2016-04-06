@@ -29,6 +29,11 @@ var requestLogger = log4js.connectLogger(log4js.getLogger("request"), { format: 
 
 var logger = log4js.getLogger("server");
 
+if(process.env.NEW_RELIC_LICENSE_KEY) {
+	logger.info("Turning on New Relic APM monitoring");
+	require("newrelic");
+}
+
 var router = express.Router({
   caseSensitive: true,
   mergeParams: true
