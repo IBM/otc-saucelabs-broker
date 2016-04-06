@@ -8,8 +8,20 @@
  *******************************************************************************/
 "use strict";
 
+var log4js = require("log4js");
+
+log4js.configure(process.env.LOG4JS_CONFIG || "./config/log4js.json", {
+	reloadSecs: 30
+});
+
+var logger = log4js.getLogger("server");
+
+if(process.env.NEW_RELIC_LICENSE_KEY) {
+	logger.info("Turning on New Relic APM monitoring");
+	require("newrelic");
+}
+
 var express = require("express"),
-    log4js = require("log4js"),
     bodyParser = require("body-parser"),
     config = require("./util/config"),
     cfenv = require("cfenv"),
@@ -21,18 +33,7 @@ var appstatus = require("./controllers/status"),
     version = require("./controllers/version"),
     service_instances = require("./controllers/service-instances");
 
-log4js.configure(process.env.LOG4JS_CONFIG || "./config/log4js.json", {
-	reloadSecs: 30
-});
-
 var requestLogger = log4js.connectLogger(log4js.getLogger("request"), { format: ":method :url :status - :response-time ms" });
-
-var logger = log4js.getLogger("server");
-
-if(process.env.NEW_RELIC_LICENSE_KEY) {
-	logger.info("Turning on New Relic APM monitoring");
-	require("newrelic");
-}
 
 var router = express.Router({
   caseSensitive: true,
