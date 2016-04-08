@@ -27,7 +27,7 @@ var sid = "TEST",
 		"dashboard_url": "http://sourcelab.override.config.com",
 		"parameters": {"username":"", "key":""}
 	},
-	auth = "Basic " + new Buffer(config.tiam_client_id + ":" + config.otc_api_broker_secret).toString("base64");
+	auth = "Basic " + new Buffer(config.otc_api_broker_id + ":" + config.otc_api_broker_secret).toString("base64");
 
 
 
@@ -45,7 +45,7 @@ test("Setup and test preparation", function (tst) {
 
 	tst.test("Test that all needed environment variables are defined", function (t) {
 
-		var env = ["TEST_URL", "SAUCELABS_USERNAME","SAUCELABS_KEY","ORGANIZATION_GUID","SAUCELABS_USERNAME","SAUCELABS_KEY","TEST_USER","TEST_PASSWORD","TOKEN_HOST"];
+		var env = ["TEST_URL", "SAUCELABS_USERNAME","SAUCELABS_KEY","ORGANIZATION_GUID","TEST_USER","TEST_PASSWORD"];
 		var count = 0;
 		for(var i = 0; i < env.length;i++){
 			if (typeof process.env[env[i]] === "undefined"){

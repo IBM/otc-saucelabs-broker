@@ -18,9 +18,7 @@ module.exports = {
 	buildNumber: process.env.BUILD_NUMBER,
 	dashboardUrl: process.env.DASHBOARD_URL || config.dashboardUrl,
 
-	tiam_url: process.env.TIAM_URL || config.tiam_url,
-    tiam_client_id: process.env.TIAM_CLIENT_ID || config.tiam_client_id,
-    tiam_client_secret: process.env.TIAM_CLIENT_SECRET  || config.tiam_client_secret,
+   	otc_api_broker_id: process.env.OTC_API_BROKER_ID || config.otc_api_broker_id,
     otc_api_broker_secret: process.env.OTC_API_BROKER_SECRET || config.otc_api_broker_secret,
 
     cloudant_url: process.env.CLOUDANT_URL || cfenv.getAppEnv().getServiceURL("otc-saucelabs-db") || config.cloudant_url,
