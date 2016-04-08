@@ -15,6 +15,7 @@
     "cloudant": "^1.2.0",
     "express": "^4.13.3",
     "log4js": "^0.6.9",
+    "newrelic": "^1.25.4",
     "request": "^2.61.0",
     "saucelabs": "^1.0.1",
     "supervisor": "0.7.1"
