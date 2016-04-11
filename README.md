@@ -45,7 +45,7 @@ LOCAL USAGE
 
 	On the command line, run:
 
-	export TIAM_CLIENT_SECRET="<saucelabs tiam secret>"
+	export OTC_API_BROKER_SECRET="<otc api broker secret>"
 	export CLOUDANT_URL="https://<account name>:<password>@<account name>.cloudant.com"
 	export CLOUDANT_DATABASE="<a database name>"
 
@@ -75,7 +75,6 @@ RUNNING TESTS
 	export SAUCELABS_USERNAME="<your saucelabs username>"
 	export SAUCELABS_KEY="<your saucelabs key>"
 	export ORGANIZATION_GUID="<a valid org id for TEST_USER>"
-	export TOKEN_URL="<base url to the login server>" (example https://login.stage1.ng.bluemix.net)
 	export TEST_USER="<test username>"
 	export TEST_PASSWORD="<test username password>"
 
