@@ -22,5 +22,7 @@ module.exports = {
     otc_api_broker_secret: process.env.OTC_API_BROKER_SECRET || config.otc_api_broker_secret,
 
     cloudant_url: process.env.CLOUDANT_URL || cfenv.getAppEnv().getServiceURL("otc-saucelabs-db") || config.cloudant_url,
-    cloudant_database: process.env.CLOUDANT_DATABASE || config.cloudant_database
+    cloudant_database: process.env.CLOUDANT_DATABASE || config.cloudant_database,
+
+    localKey: process.env.LOCAL_KEY
 };

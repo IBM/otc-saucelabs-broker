@@ -14,7 +14,8 @@ var express = require("express"),
     saucelabs = require("../util/saucelabs"),
     database = require("../util/database"),
     log4js = require("log4js"),
-    logger = log4js.getLogger("service-instance");
+    logger = log4js.getLogger("service-instance"),
+    crypto = require("../util/crypto");
 
 router.put("/:sid", createOrUpdateServiceInstance);
 router.patch("/:sid", createOrUpdateServiceInstance);
@@ -50,6 +51,10 @@ function createOrUpdateServiceInstance (req, res) {
 
 	database.getDocument(sid, function(doc){
 		if (doc){
+			doc = decrypt(doc);
+			if (doc === null){
+				return res.status(400).json({description: "Decryption error"});
+			}
 			updateDocument(doc, req, res, paramsToUpdate);
 		} else {
 			createDocument(req, res, paramsToUpdate);
@@ -100,6 +105,10 @@ function validateAndInsert(doc, req, res) {
 			res.status(400).json({description: "Saucelabs credentials could not be verified"});
 			return;
 		}
+		doc = encrypt(doc);
+		if (doc === null){
+			res.status(400).json({description: "Encryption error"});
+		}
 	    database.insertDocument(doc, function(result) {
 			if (result) {
 				var json = {};
@@ -111,13 +120,42 @@ function validateAndInsert(doc, req, res) {
 						parameters: doc.parameters
 					};
 				}
-				res.status(200).json(json);
+				json = decrypt(json);
+				if (json === null){
+					res.status(400).json({description: "Decryption error"});
+				} else {
+					res.status(200).json(json);
+				}
 			} else {
 				logger.error("Could not write to database");
 				res.status(400).json({description: "Could not write to database"});
 			}
 	    });
 	});
+}
+
+function encrypt(json){
+	if (json && json.parameters && json.parameters.key){
+		var value = crypto.encrypt(json.parameters.key);
+		if (value === null){
+			return null;
+		} else {
+			json.parameters.key = value;
+		}
+	}
+	return json;
+}
+
+function decrypt(json){
+	if (json && json.parameters && json.parameters.key){
+		var value = crypto.decrypt(json.parameters.key);
+		if (value === null){
+			return null;
+		} else {
+			json.parameters.key = value;
+		}
+	}
+	return json;
 }
 
 function bindServiceInstance (req, res) {
