@@ -7,5 +7,7 @@
 	"otc_api_broker_secret":"",
 
 	"cloudant_url": "",
-	"cloudant_database": "sauce"
+	"cloudant_database": "sauce_broker",
+
+	"encrypt": "no"
 }

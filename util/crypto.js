@@ -12,26 +12,31 @@ var crypto = require("crypto"),
 	localKey = config.localKey;
 
 exports.encrypt = function(str){
-	return str;
-	try {
-		var cipher = crypto.createCipher("aes-256-ctr", localKey);
-		var encrypted = cipher.update(str, "utf82", "hex");
-		encrypted += cipher.final("hex");
-		return encrypted;
-	} catch (e){
-		return null;
+	if (config.encrypt === "yes"){
+		try {
+			var cipher = crypto.createCipher("aes-256-ctr", localKey);
+			var encrypted = cipher.update(str, "utf82", "hex");
+			encrypted += cipher.final("hex");
+			return encrypted;
+		} catch (e){
+			return null;
+		}
+	} else {
+		return str;
 	}
 };
 
 exports.decrypt = function(str){
-	return str;
-	try {
-		var decipher = crypto.createDecipher("aes-256-ctr", localKey);
-		var decrypted = decipher.update(str, "hex", "utf8");
-		decrypted += decipher.final("utf8");
-		return decrypted;
-	} catch (e){
-		return null;
+	if (config.encrypt === "yes"){
+		try {
+			var decipher = crypto.createDecipher("aes-256-ctr", localKey);
+			var decrypted = decipher.update(str, "hex", "utf8");
+			decrypted += decipher.final("utf8");
+			return decrypted;
+		} catch (e){
+			return null;
+		}
+	} else {
+		return str;
 	}
-
 };

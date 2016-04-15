@@ -7,8 +7,7 @@
  * Contract with IBM Corp.
  *******************************************************************************/
 
-var config = require("../config/config.json"),
-	cfenv = require("cfenv");
+var config = require("../config/config.json");
 
 module.exports = {
 	env: process.env.APPLICATION_ENV || config.env,
@@ -21,8 +20,12 @@ module.exports = {
    	otc_api_broker_id: process.env.OTC_API_BROKER_ID || config.otc_api_broker_id,
     otc_api_broker_secret: process.env.OTC_API_BROKER_SECRET || config.otc_api_broker_secret,
 
-    cloudant_url: process.env.CLOUDANT_URL || cfenv.getAppEnv().getServiceURL("otc-saucelabs-db") || config.cloudant_url,
+    cloudant_url: process.env.CLOUDANT_URL,
+    cloudant_password: process.env.CLOUDANT_PASSWORD,
+    cloudant_username: process.env.CLOUDANT_USERNAME,
     cloudant_database: process.env.CLOUDANT_DATABASE || config.cloudant_database,
 
-    localKey: process.env.LOCAL_KEY
+    localKey: process.env.LOCAL_KEY,
+
+    encrypt: process.env.ENCRYPT || config.encrypt
 };

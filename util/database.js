@@ -9,9 +9,9 @@
 "use strict";
 
 var log4js = require("log4js"),
-	url = require("url"),
 	config = require("../util/config"),
-    cloudant = require("cloudant")(config.cloudant_url),
+	connectionString = "https://" + config.cloudant_username + ":" + config.cloudant_password + "@" + config.cloudant_url,
+    cloudant = require("cloudant")(connectionString),
     db_name = config.cloudant_database,
     db = cloudant.db.use(db_name),
     database_ok = false;
@@ -20,7 +20,7 @@ var logger = log4js.getLogger("database");
 
 exports.init = function() {
 	cloudant.db.get(db_name, function(err, body) {
-		var dbInfo = "database " +  db_name +  " on " + url.parse(config.cloudant_url).host;
+		var dbInfo = "database " +  db_name +  " on " + config.cloudant_url;
 		if (!err) {
 			logger.info("Using " + dbInfo);
 			database_ok = true;
@@ -33,6 +33,7 @@ exports.init = function() {
 					return true;
 				} else {
 					logger.error("Failed to get/create " + dbInfo);
+					logger.error(err.toString());
 					logger.error("Make sure cloudant connection parameters and access are correct and try again");
 					return false;
 				}
