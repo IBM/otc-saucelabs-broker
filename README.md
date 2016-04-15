@@ -46,8 +46,10 @@ LOCAL USAGE
 	On the command line, run:
 
 	export OTC_API_BROKER_SECRET="<otc api broker secret>"
-	export CLOUDANT_URL="https://<account name>:<password>@<account name>.cloudant.com"
+	export CLOUDANT_URL="<cloudant url name without protocol>"
 	export CLOUDANT_DATABASE="<a database name>"
+	export CLOUDANT_PASSWORD="<password>"
+	export CLOUDANT_USERNAME="<account name>"
 	export LOCAL_KEY="<the key used to encrypt/decrypt the saucelabs key>"
 
 	Install the module dependencies by running npm install.

@@ -14,15 +14,9 @@ module.exports = function(req, res, next) {
     switch(req.method) {
     case "GET":
     	if (database.isOk()){
-    		database.validateRead(function(ok, msg){
-    			if (ok){
-    				res.status(200).send({});
-    			} else{
-    				res.status(500).send({description:msg});
-    			}
-    		});
-    	} else {
-    		res.status(500).send({description:"Failed to connect to the database"});
+    		res.status(200).send({});
+		} else{
+        	res.status(500).send({description:"Failed to connect to the database"});
     	}
         break;
     default:
