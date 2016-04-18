@@ -28,4 +28,5 @@ module.exports = {
     localKey: process.env.LOCAL_KEY,
 
     encrypt: process.env.ENCRYPT || config.encrypt
+
 };

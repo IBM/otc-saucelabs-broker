@@ -2,3 +2,5 @@ node_modules
 dist/
 build_info.json
 local
+npm-debug.log
+package.json.orig
