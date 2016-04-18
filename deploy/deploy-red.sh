@@ -24,11 +24,7 @@ cf set-env "$RED" CLOUDANT_PASSWORD "$CLOUDANT_PASSWORD"
 cf set-env "$RED" CLOUDANT_USERNAME "$CLOUDANT_USERNAME"
 
 
-cf set-env "$RED" IDS_USER "$IDS_USER"
-cf set-env "$RED" IDS_PASS "$IDS_PASS"
-
 cf set-env "$RED" log4js_syslog_appender_enabled "$LOG4JS_SYSLOG_APPENDER_ENABLED"
-cf set-env "$RED" log4js_syslog_appender_whitelist "$LOG4JS_SYSLOG_APPENDER_WHITELIST"
 cf set-env "$RED" log4js_syslog_appender_host "$LOG4JS_SYSLOG_APPENDER_HOST"
 cf set-env "$RED" log4js_syslog_appender_port "$LOG4JS_SYSLOG_APPENDER_PORT"
 cf set-env "$RED" log4js_syslog_appender_certificatePath "$LOG4JS_SYSLOG_APPENDER_CERTIFICATEPATH"
