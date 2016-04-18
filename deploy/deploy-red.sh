@@ -39,11 +39,6 @@ cf set-env "$RED" log4js_syslog_appender_product "$LOG4JS_SYSLOG_APPENDER_PRODUC
 
 cf set-env "$RED" LOCAL_KEY "$LOCAL_KEY"
 
-# bind the cloudant service instance
-# this will make the url, with credentials, show up as
-# part of the VCAP environment variables
-cf bind-service "$RED" "$CLOUDANT_SERVICE_NAME"
-
 # add a red route for testing
 cf map-route "$RED" "$DOMAIN" -n "$RED"
 
