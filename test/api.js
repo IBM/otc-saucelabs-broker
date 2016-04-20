@@ -27,6 +27,9 @@ var sid = "TEST",
 		"dashboard_url": "http://sourcelab.override.config.com",
 		"parameters": {"username":"", "key":""}
 	},
+	patch = {
+		"parameters": {"username":"", "key":""}
+	},
 	auth = "Basic " + new Buffer(config.otc_api_broker_id + ":" + config.otc_api_broker_secret).toString("base64");
 
 
@@ -35,6 +38,9 @@ var sid = "TEST",
 create.parameters.username = process.env.SAUCELABS_USERNAME;
 create.parameters.key = process.env.SAUCELABS_KEY;
 create.organization_guid = process.env.ORGANIZATION_GUID;
+
+patch.parameters.username = process.env.SAUCELABS_USERNAME;
+patch.parameters.key = process.env.SAUCELABS_KEY;
 
 expectedReply.instance_id = sid;
 expectedReply.parameters.username = process.env.SAUCELABS_USERNAME;
@@ -99,13 +105,12 @@ test("Test normal operation", function (tst) {
 			});
 	});
 
-	tst.test("Patch "  + sid + " instance (dashboard_url)", function (t) {
-		create.dashboard_url = "http://saucelabs.com/PATCH";
+	tst.test("Patch "  + sid + " instance (saucelabs user)", function (t) {
 		request
 			.patch(baseUrl)
 			.set("Authorization", auth)
 			.set("Accept", "application/json")
-			.send(create)
+			.send(patch)
 			.expect("Content-Type", /json/)
 			.expect(200, {})
 			.end(function(err, res){
@@ -113,6 +118,7 @@ test("Test normal operation", function (tst) {
 	            t.end();
 			});
 	});
+
 
 	tst.test("Bind " + tid1 + " toolchain to " + sid, function (t) {
 		request

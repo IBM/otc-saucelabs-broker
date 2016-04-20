@@ -40,7 +40,7 @@ function createOrUpdateServiceInstance (req, res) {
 		}
 	}
 
-	if (paramsToUpdate.indexOf("organization_guid") === -1){
+	if (paramsToUpdate.indexOf("organization_guid") === -1 && req.method === "PUT"){
 		return res.status(400).json({ "description": "Error: organization_guid is a required parameter."});
 	}
 
