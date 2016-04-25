@@ -112,14 +112,12 @@ function validateAndInsert(doc, req, res) {
 	    database.insertDocument(doc, function(result) {
 			if (result) {
 				var json = {};
-				if (req.method !== "PATCH") {
-					doc.parameters.label = doc.parameters.username;
-					json = {
-						instance_id: doc._id,
-						dashboard_url: doc.dashboard_url,
-						parameters: doc.parameters
-					};
-				}
+				doc.parameters.label = doc.parameters.username;
+				json = {
+					instance_id: doc._id,
+					dashboard_url: doc.dashboard_url,
+					parameters: doc.parameters
+				};
 				json = decrypt(json);
 				if (json === null){
 					res.status(400).json({description: "Decryption error"});

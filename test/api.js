@@ -112,7 +112,7 @@ test("Test normal operation", function (tst) {
 			.set("Accept", "application/json")
 			.send(patch)
 			.expect("Content-Type", /json/)
-			.expect(200, {})
+			.expect(200, expectedReply)
 			.end(function(err, res){
 				t.equal(err, null);
 	            t.end();
