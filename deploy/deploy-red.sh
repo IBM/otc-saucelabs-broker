@@ -22,7 +22,7 @@ cf set-env "$RED" NEW_RELIC_APP_NAME "$NEW_RELIC_APP_NAME"
 cf set-env "$RED" CLOUDANT_URL "$CLOUDANT_URL"
 cf set-env "$RED" CLOUDANT_PASSWORD "$CLOUDANT_PASSWORD"
 cf set-env "$RED" CLOUDANT_USERNAME "$CLOUDANT_USERNAME"
-
+cf set-env "$RED" SECGRP "$SECGRP"
 
 cf set-env "$RED" log4js_syslog_appender_enabled "$LOG4JS_SYSLOG_APPENDER_ENABLED"
 cf set-env "$RED" log4js_syslog_appender_host "$LOG4JS_SYSLOG_APPENDER_HOST"
