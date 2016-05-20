@@ -13,7 +13,7 @@
 RED=${CF_APP}-red
 
 # push the app
-cf push "$RED" -d "$DOMAIN" -m 1G --no-route --no-start
+cf push "$RED" -i "${NUM_INSTANCES:-1}" -d "$DOMAIN" -m 1G --no-route --no-start
 
 # set the otc broker secret
 cf set-env "$RED" OTC_API_BROKER_SECRET "$OTC_API_BROKER_SECRET"
