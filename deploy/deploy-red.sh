@@ -27,11 +27,10 @@ cf set-env "$RED" SECGRP "$SECGRP"
 cf set-env "$RED" log4js_syslog_appender_enabled "$LOG4JS_SYSLOG_APPENDER_ENABLED"
 cf set-env "$RED" log4js_syslog_appender_host "$LOG4JS_SYSLOG_APPENDER_HOST"
 cf set-env "$RED" log4js_syslog_appender_port "$LOG4JS_SYSLOG_APPENDER_PORT"
-cf set-env "$RED" log4js_syslog_appender_certificatePath "$LOG4JS_SYSLOG_APPENDER_CERTIFICATEPATH"
-cf set-env "$RED" log4js_syslog_appender_privateKeyPath "$LOG4JS_SYSLOG_APPENDER_PRIVATEKEYPATH"
-cf set-env "$RED" log4js_syslog_appender_caPath "$LOG4JS_SYSLOG_APPENDER_CAPATH"
 cf set-env "$RED" log4js_syslog_appender_product "$LOG4JS_SYSLOG_APPENDER_PRODUCT"
-
+cf set-env "$RED" log4js_syslog_appender_certificateBase64 "$LOG4JS_SYSLOG_APPENDER_CERTIFICATEBASE64"
+cf set-env "$RED" log4js_syslog_appender_privateKeyBase64 "$LOG4JS_SYSLOG_APPENDER_PRIVATEKEYBASE64"
+cf set-env "$RED" log4js_syslog_appender_caBase64 "$LOG4JS_SYSLOG_APPENDER_CABASE64"
 
 cf set-env "$RED" LOCAL_KEY "$LOCAL_KEY"
 
