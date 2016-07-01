@@ -19,7 +19,8 @@
   "request": "^2.61.0",
   "saucelabs": "^1.0.1",
   "supervisor": "0.7.1",
-  "log4js-syslog-appender": "git+https://github.ibm.com/org-ids/node-log4js-syslog-appender#v0.2.0"
+  "log4js-syslog-appender": "git+https://github.ibm.com/org-ids/node-log4js-syslog-appender#v0.2.0",
+  "@org-ids/log4js-logmet-appender": "git+https://%24%7Benv.IDS_USER%7D@github.ibm.com/org-ids/node-log4js-logmet-appender#v0.1.9"
  },
  "devDependencies": {
   "supertest": "^1.1.0",
