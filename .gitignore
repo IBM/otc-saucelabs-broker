@@ -4,3 +4,4 @@ build_info.json
 local
 npm-debug.log
 package.json.orig
+newrelic_agent.log

