@@ -42,3 +42,35 @@ exports.validateCredentials = function(creds, callback) {
     callback(false);
   }
 };
+
+exports.serviceStatus = function(creds, callback) {
+  if (typeof creds === "undefined"){
+    logger.error("Tried to validate undefined credentials");
+    return callback(false,"Tried to validate undefined credentials");
+  }
+
+  var account = new SauceLabs({
+    username: creds.username,
+    password: creds.key
+  });
+
+  try {
+    account.getServiceStatus(function (err, res) {
+        if (err){
+          logger.error("Failed to get service status");
+          callback(false, "Failed to get service status");
+        } else {
+          if (typeof res === "undefined"){
+            logger.error("Failed to get service status: response undefined");
+            callback(false, "Failed to get service status: response undefined");
+          } else {
+            callback(true, "Saucelabs service status OK");
+          }
+        }
+    });
+  } catch (e) {
+    logger.error("Failed to validate saucelabs credentials: " + e);
+    callback(false, "Failed to validate saucelabs credentials: " + e);
+  }
+};
+

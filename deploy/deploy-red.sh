@@ -22,7 +22,10 @@ cf set-env "$RED" NEW_RELIC_APP_NAME "$NEW_RELIC_APP_NAME"
 cf set-env "$RED" CLOUDANT_URL "$CLOUDANT_URL"
 cf set-env "$RED" CLOUDANT_PASSWORD "$CLOUDANT_PASSWORD"
 cf set-env "$RED" CLOUDANT_USERNAME "$CLOUDANT_USERNAME"
+cf set-env "$RED" SAUCELABS_USERNAME "$SAUCELABS_USERNAME"
+cf set-env "$RED" SAUCELABS_KEY "$SAUCELABS_KEY"
 cf set-env "$RED" SECGRP "$SECGRP"
+
 
 cf set-env "$RED" log4js_syslog_appender_enabled "$LOG4JS_SYSLOG_APPENDER_ENABLED"
 cf set-env "$RED" log4js_syslog_appender_host "$LOG4JS_SYSLOG_APPENDER_HOST"
@@ -38,9 +41,6 @@ cf set-env "$RED" log4js_logmet_logging_token "$LOG4JS_LOGMET_LOGGING_TOKEN"
 cf set-env "$RED" log4js_logmet_space_id "$LOG4JS_LOGMET_SPACE_ID"
 cf set-env "$RED" log4js_logmet_logging_host "$LOG4JS_LOGMET_LOGGING_HOST"
 cf set-env "$RED" log4js_logmet_logging_port "$LOG4JS_LOGMET_LOGGING_PORT"
-
-
-cf set-env "$RED" LOCAL_KEY "$LOCAL_KEY"
 
 # add a red route for testing
 cf map-route "$RED" "$DOMAIN" -n "$RED"
