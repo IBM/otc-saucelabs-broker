@@ -50,7 +50,7 @@ function testVersion(){
 function testStatus() {
 	request
 		.get("/status")
-		.expect(200, {})
+		.expect(200)
 		.end(function(err, res){
 			if (err) {
 				throw err;
