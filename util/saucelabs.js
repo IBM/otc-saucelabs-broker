@@ -43,6 +43,7 @@ exports.validateCredentials = function(creds, callback) {
   }
 };
 
+//no translations, only used for /status route
 exports.serviceStatus = function(creds, callback) {
   if (typeof creds === "undefined"){
     logger.error("Tried to validate undefined credentials");

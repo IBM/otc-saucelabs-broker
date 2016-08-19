@@ -8,13 +8,16 @@
  *******************************************************************************/
 "use strict";
 
+require("i18n");
+
 var express = require("express"),
 	router = express.Router(),
 	config = require("../util/config"),
     saucelabs = require("../util/saucelabs"),
     database = require("../util/database"),
     log4js = require("log4js"),
-    logger = log4js.getLogger("service-instance");
+    logger = log4js.getLogger("service-instance"),
+	msgs = require("../nls/msgs.properties");
 
 router.put("/:sid", createOrUpdateServiceInstance);
 router.patch("/:sid", createOrUpdateServiceInstance);
@@ -40,11 +43,11 @@ function createOrUpdateServiceInstance (req, res) {
 	}
 
 	if (paramsToUpdate.indexOf("organization_guid") === -1 && req.method === "PUT"){
-		return res.status(400).json({ "description": "Error: organization_guid is a required parameter."});
+		return res.status(400).json({ "description": msgs.get("error.org_missing", req)});
 	}
 
 	if (paramsToUpdate.indexOf("parameters") !== -1 && !validateParameters(req.body.parameters)){
-		res.status(400).json({description: "Could not validate parameters. username and key are required"});
+		res.status(400).json({description: msgs.get("error.usernamekey_missing", req)});
 		return;
 	}
 
@@ -97,7 +100,7 @@ function updateDocument(doc, req, res, paramsToUpdate){
 function validateAndInsert(doc, req, res) {
 	saucelabs.validateCredentials(doc.parameters, function(ok){
 		if(!ok){
-			res.status(400).json({description: "Saucelabs credentials could not be verified"});
+			res.status(400).json({description: msgs.get("error.sauce_creds", req)});
 			return;
 		}
 	    database.insertDocument(doc, function(result) {
@@ -112,7 +115,7 @@ function validateAndInsert(doc, req, res) {
 				res.status(200).json(json);
 			} else {
 				logger.error("Could not write to database");
-				res.status(400).json({description: "Could not write to database"});
+				res.status(400).json({description: msgs.get("error.database_write", req)});
 			}
 	    });
 	});
@@ -127,7 +130,7 @@ function bindServiceInstance (req, res) {
 			var binds = doc.binds || [];
 			if (binds.indexOf(tid) !== -1){
 				logger.error("Toolchain " + tid + " already bound to service instance " + sid);
-				res.status(400).json({description: "Toolchain " + tid + " already bound to service instance " + sid});
+				res.status(400).json({description: msgs.get("error.alreadybound", [sid], req)});
 				return;
 			}
 			binds.push(tid);
@@ -137,12 +140,12 @@ function bindServiceInstance (req, res) {
 					res.status(204).end();
 				} else {
 					logger.error("Failed to bind toolchain " + tid + " to service instance " + sid);
-					res.status(400).json({description: "Failed to bind toolchain " + tid + " to service instance " + sid});
+					res.status(400).json({description: msgs.get("error.failedtobind",[tid, sid], req)});
 				}
 			});
 		} else {
 			logger.error("Bind - no such service instance: " + sid);
-			res.status(404).json({description: "No such service instance: " + sid});
+			res.status(404).json({description: msgs.get("error.nosuchinstance", [sid], req)});
 		}
 	});
 }
@@ -157,12 +160,12 @@ function deleteServiceInstance (req, res) {
 					res.status(204).end();
 				} else {
 					logger.error("Failed to delete service instance: " + sid);
-					res.status(500).json({description: "Failed to delete service instance: " + sid});
+					res.status(500).json({description: msgs.get("error.deletefail", [sid], req)});
 				}
 			});
 		} else {
 			logger.error("Delete - No such service instance: " + sid);
-			res.status(404).json({description: "No such service instance: " + sid});
+			res.status(404).json({description: msgs.get("error.nosuchinstance", [sid], req)});
 		}
 	});
 }
@@ -178,12 +181,12 @@ function unbindServiceInstanceFromAllToolchains(req, res) {
 					res.status(204).end();
 				} else {
 					logger.error("Failed to unbind all toolchains from service instance " + sid);
-					res.status(400).json({description: "Failed to unbind all toolchains from service instance"});
+					res.status(400).json({description: msgs.get("error.unbindall", req)});
 				}
 			});
 		} else {
 			logger.error("No such service instance: " + sid);
-			res.status(404).json({description: "No such service instance: " + sid});
+			res.status(404).json({description: msgs.get("error.nosuchinstance", [sid], req)});
 		}
 	});
 }
@@ -198,7 +201,7 @@ function unbindServiceInstanceFromToolchain (req, res) {
 				idx = binds.indexOf(tid);
 			if (idx === -1) {
 				logger.error("No such bound toolchain: " + tid + " for service instance " +sid);
-				res.status(404).json({description: "No such bound toolchain: " + tid});
+				res.status(404).json({description: msgs.get("error.notbound", [tid, sid], req)});
 				return;
 			} else {
 				binds.splice(idx, 1);
@@ -209,7 +212,7 @@ function unbindServiceInstanceFromToolchain (req, res) {
 					res.status(204).end();
 				} else {
 					logger.error("Failed to unbind toolchain " + tid + " to service instance " + sid);
-					res.status(400).json({description: "Failed to unbind toolchain " + tid + " to service instance " + sid});
+					res.status(400).json({description: msgs.get("error.unbind", [tid, sid], req)});
 				}
 			});
 		} else {

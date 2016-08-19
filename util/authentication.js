@@ -8,9 +8,12 @@
  */
 "use strict";
 
+require("i18n");
+
 var config = require("./config"),
 	log4js = require("log4js"),
-	url = require("url");
+	url = require("url"),
+	msgs = require("../nls/msgs.properties");
 
 var logger = log4js.getLogger("authentication");
 
@@ -42,18 +45,18 @@ module.exports = function() {
 				} catch (e) {}
 				if (id !== config.otc_api_broker_id || secret !== config.otc_api_broker_secret) {
 					logger.debug("Invalid Basic Credentials provided " + config.otc_api_broker_secret.length);
-					return res.status(401).json({description: "An invalid authorization header was passed in."});
+					return res.status(401).json({description: msgs.get("error.auth", req)});
 				}
 				return next();
 			} else {
-                return res.status(401).json({description: "An invalid authorization header was passed in."});
+                return res.status(401).json({description: msgs.get("error.auth", req)});
             }
 		} else {
 			var requestPath = url.parse(req.url).pathname;
 			if (requestPath === "/version" || requestPath === "/status"){
 				next();
 			} else {
-				return res.status(401).json({description: "An invalid authorization header was passed in."});
+				return res.status(401).json({description: msgs.get("error.auth", req)});
 			}
 		}
 	};

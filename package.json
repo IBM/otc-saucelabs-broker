@@ -20,7 +20,8 @@
   "saucelabs": "^1.0.1",
   "supervisor": "0.7.1",
   "log4js-qradar-syslog-appender": "git+https://github.com/IBM/node-log4js-qradar-syslog-appender.git#v0.3.0",
-  "@org-ids/log4js-logmet-appender": "git+https://github.ibm.com/org-ids/node-log4js-logmet-appender#v0.1.9"
+  "@org-ids/log4js-logmet-appender": "git+https://github.ibm.com/org-ids/node-log4js-logmet-appender#v0.1.9",
+  "i18n": "git+https://github.ibm.com/org-ids/node-i18n#v0.1.17"
  },
  "devDependencies": {
   "supertest": "^1.1.0",
