@@ -650,6 +650,11 @@
       "from": "https-proxy-agent@>=1.0.0 <2.0.0",
       "resolved": "https://registry.npmjs.org/https-proxy-agent/-/https-proxy-agent-1.0.0.tgz"
     },
+    "i18n": {
+      "version": "0.1.17",
+      "from": "git+https://github.ibm.com/org-ids/node-i18n#v0.1.17",
+      "resolved": "git+https://github.ibm.com/org-ids/node-i18n#7b858bbd3e2772d367b50146bb14c34407b352eb"
+    },
     "iconv-lite": {
       "version": "0.4.13",
       "from": "iconv-lite@0.4.13",
