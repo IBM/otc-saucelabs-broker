@@ -53,7 +53,7 @@ module.exports = function() {
             }
 		} else {
 			var requestPath = url.parse(req.url).pathname;
-			if (requestPath === "/version" || requestPath === "/status"){
+			if (requestPath === "/version" || requestPath === "/status" || requestPath === "/nls"){
 				next();
 			} else {
 				return res.status(401).json({description: msgs.get("error.auth", req)});

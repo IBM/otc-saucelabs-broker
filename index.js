@@ -31,6 +31,7 @@ var express = require("express"),
 
 var appstatus = require("./controllers/status"),
     version = require("./controllers/version"),
+    nls = require("./controllers/nls"),
     service_instances = require("./controllers/service-instances");
 
 var requestLogger = log4js.connectLogger(log4js.getLogger("request"), { format: ":method :url :status - :response-time ms" });
@@ -45,6 +46,7 @@ router
   .use(requestLogger)
   .all("/status", appstatus)
   .all("/version", version)
+  .all("/nls", nls)
   .use(config.contextRoot + config.contextPath + "/service_instances", service_instances);
 
 
