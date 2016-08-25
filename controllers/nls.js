@@ -27,7 +27,7 @@ module.exports = function(req, res, next) {
             "error.notbound": msgs.get("error.notbound",["XXX","XXX"], req),
             "error.unbind": msgs.get("error.unbind", ["XXX","XXX"], req),
             "error.database_write": msgs.get("error.database_write", ["XXX","XXX"], req),
-            "error.auth": msgs.get("error.auth")
+            "error.auth": msgs.get("error.auth", req)
         };
         res.status(200).send("<pre>" + JSON.stringify(nls, null, 2) + "</pre>");
         break;
