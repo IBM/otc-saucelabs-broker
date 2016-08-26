@@ -3,5 +3,6 @@ dist/
 build_info.json
 local
 npm-debug.log
+npm-shrinkwrap.json.orig
 package.json.orig
 newrelic_agent.log
