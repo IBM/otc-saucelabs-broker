@@ -4,13 +4,13 @@
   "dependencies": {
     "@org-ids/log4js-logmet-appender": {
       "version": "0.1.8",
-      "from": "git+https://github.ibm.com/org-ids/node-log4js-logmet-appender#v0.1.9",
-      "resolved": "git+https://github.ibm.com/org-ids/node-log4js-logmet-appender#220c3ab519923362295e78c4aabc4905edeee393",
+      "from": "git+https://magnus.hoglund%40se.ibm.com:0809a1c76532350f92981d6ca3508b32c4278a5c@github.ibm.com/org-ids/node-log4js-logmet-appender#v0.1.9",
+      "resolved": "git+https://magnus.hoglund%40se.ibm.com:0809a1c76532350f92981d6ca3508b32c4278a5c@github.ibm.com/org-ids/node-log4js-logmet-appender#220c3ab519923362295e78c4aabc4905edeee393",
       "dependencies": {
         "@logmet-clients/logmet-client": {
           "version": "0.0.7",
-          "from": "git+https://github.ibm.com/LogmetClients/logmet-client-njs#v0.0.7",
-          "resolved": "git+https://github.ibm.com/LogmetClients/logmet-client-njs#66783140f0491c0f6615ef6e49cc58460b9d6077"
+          "from": "git+https://magnus.hoglund%40se.ibm.com:0809a1c76532350f92981d6ca3508b32c4278a5c@github.ibm.com/LogmetClients/logmet-client-njs#v0.0.7",
+          "resolved": "git+https://magnus.hoglund%40se.ibm.com:0809a1c76532350f92981d6ca3508b32c4278a5c@github.ibm.com/LogmetClients/logmet-client-njs#66783140f0491c0f6615ef6e49cc58460b9d6077"
         },
         "balanced-match": {
           "version": "0.4.1",
@@ -652,8 +652,8 @@
     },
     "i18n": {
       "version": "0.1.17",
-      "from": "git+https://github.ibm.com/org-ids/node-i18n#v0.1.17",
-      "resolved": "git+https://github.ibm.com/org-ids/node-i18n#7b858bbd3e2772d367b50146bb14c34407b352eb"
+      "from": "git+https://magnus.hoglund%40se.ibm.com:0809a1c76532350f92981d6ca3508b32c4278a5c@github.ibm.com/org-ids/node-i18n#v0.1.17",
+      "resolved": "git+https://magnus.hoglund%40se.ibm.com:0809a1c76532350f92981d6ca3508b32c4278a5c@github.ibm.com/org-ids/node-i18n#7b858bbd3e2772d367b50146bb14c34407b352eb"
     },
     "iconv-lite": {
       "version": "0.4.13",
