@@ -10,22 +10,22 @@
  },
  "author": "IBM",
  "dependencies": {
-  "body-parser": "^1.13.3",
-  "cfenv": "^1.0.0",
-  "cloudant": "^1.2.0",
-  "express": "^4.13.3",
-  "log4js": "^0.6.9",
-  "newrelic": "^1.25.4",
+  "body-parser": "1.13.3",
+  "cfenv": "1.0.0",
+  "cloudant": "1.2.0",
+  "express": "4.13.3",
+  "log4js": "0.6.9",
+  "newrelic": "1.25.4",
   "request": "2.72.0",
-  "saucelabs": "^1.0.1",
+  "saucelabs": "1.0.1",
   "supervisor": "0.7.1",
   "log4js-qradar-syslog-appender": "git+https://github.com/IBM/node-log4js-qradar-syslog-appender.git#v0.3.3",
   "@org-ids/log4js-logmet-appender": "git+https://github.ibm.com/org-ids/node-log4js-logmet-appender#v0.1.13",
   "i18n": "git+https://github.ibm.com/org-ids/node-i18n#v0.1.17"
  },
  "devDependencies": {
-  "supertest": "^1.1.0",
-  "tap-xunit": "^1.3.1",
-  "tape": "^4.4.0"
+  "supertest": "1.1.0",
+  "tap-xunit": "1.3.1",
+  "tape": "4.4.0"
  }
 }
