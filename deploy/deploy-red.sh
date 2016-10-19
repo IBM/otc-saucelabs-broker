@@ -24,7 +24,7 @@ fi
 # push the app
 cf push "$RED" -i "${NUM_INSTANCES:-1}" -d "$DOMAIN" -m 1G --no-route --no-start
 
-if ! cf enable-diego "$BLUE"; then
+if ! cf enable-diego "$RED"; then
     error "Error enabling diego for $RED"
 fi
 
