@@ -12,21 +12,8 @@
 
 RED=${CF_APP}-red
 
-if ! cf add-plugin-repo CF-Community https://plugins.cloudfoundry.org/; then
-    error "Error adding CF plugin repo https://plugins.cloudfoundry.org/"
-fi
-
-if ! cf install-plugin -f Diego-Enabler -r CF-Community; then
-    error "Error installing Diego-Enabled plugin"
-fi
-
-
 # push the app
 cf push "$RED" -i "${NUM_INSTANCES:-1}" -d "$DOMAIN" -m 1G --no-route --no-start
-
-if ! cf enable-diego "$RED"; then
-    error "Error enabling diego for $RED"
-fi
 
 # set the otc broker secret
 cf set-env "$RED" OTC_API_BROKER_SECRET "$OTC_API_BROKER_SECRET"
