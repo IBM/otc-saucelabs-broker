@@ -41,6 +41,7 @@ cf set-env "$RED" log4js_logmet_logging_token "$LOG4JS_LOGMET_LOGGING_TOKEN"
 cf set-env "$RED" log4js_logmet_space_id "$LOG4JS_LOGMET_SPACE_ID"
 cf set-env "$RED" log4js_logmet_logging_host "$LOG4JS_LOGMET_LOGGING_HOST"
 cf set-env "$RED" log4js_logmet_logging_port "$LOG4JS_LOGMET_LOGGING_PORT"
+cf set-env "$RED" log4js_syslog_appender_whitelist "$LOG4JS_SYSLOG_APPENDER_WHITELIST"
 
 # add a red route for testing
 cf map-route "$RED" "$DOMAIN" -n "$RED"
