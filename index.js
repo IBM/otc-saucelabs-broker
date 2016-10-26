@@ -27,7 +27,8 @@ var express = require("express"),
     cfenv = require("cfenv"),
     authentication = require("./util/authentication"),
     appEnv = cfenv.getAppEnv(),
-    app = express();
+    app = express(),
+    auditLogMiddleware = require("qradar-audit-logs-middleware");
 
 var appstatus = require("./controllers/status"),
     version = require("./controllers/version"),
@@ -59,6 +60,7 @@ app
     next();
   })
   .use(authentication())
+  .use(auditLogMiddleware(log4js.getLogger("audit-logs")))
   .use(router)
   .listen(appEnv.port, function () {
     logger.info("Sauce Labs broker starting on: " + appEnv.url);

@@ -771,6 +771,11 @@
           "version": "0.1.15",
           "from": "async@0.1.15",
           "resolved": "https://registry.npmjs.org/async/-/async-0.1.15.tgz"
+        },
+        "semver": {
+          "version": "1.1.4",
+          "from": "semver@>=1.1.4 <1.2.0",
+          "resolved": "https://registry.npmjs.org/semver/-/semver-1.1.4.tgz"
         }
       }
     },
@@ -783,11 +788,6 @@
           "version": "0.6.38",
           "from": "log4js@>=0.6.33 <0.7.0",
           "resolved": "https://registry.npmjs.org/log4js/-/log4js-0.6.38.tgz"
-        },
-        "semver": {
-          "version": "4.3.6",
-          "from": "semver@>=4.3.3 <4.4.0",
-          "resolved": "https://registry.npmjs.org/semver/-/semver-4.3.6.tgz"
         }
       }
     },
@@ -1041,6 +1041,23 @@
       "from": "proxy-addr@>=1.0.8 <1.1.0",
       "resolved": "https://registry.npmjs.org/proxy-addr/-/proxy-addr-1.0.10.tgz"
     },
+    "punycode": {
+      "version": "1.4.1",
+      "from": "punycode@>=1.4.1 <2.0.0",
+      "resolved": "https://registry.npmjs.org/punycode/-/punycode-1.4.1.tgz"
+    },
+    "qradar-audit-logs-middleware": {
+      "version": "0.0.5",
+      "from": "qradar-audit-logs-middleware@latest",
+      "resolved": "https://registry.npmjs.org/qradar-audit-logs-middleware/-/qradar-audit-logs-middleware-0.0.5.tgz",
+      "dependencies": {
+        "log4js": {
+          "version": "0.6.38",
+          "from": "log4js@>=0.6.33 <0.7.0",
+          "resolved": "https://registry.npmjs.org/log4js/-/log4js-0.6.38.tgz"
+        }
+      }
+    },
     "qs": {
       "version": "4.0.0",
       "from": "qs@4.0.0",
@@ -1070,7 +1087,7 @@
     },
     "readable-stream": {
       "version": "1.0.34",
-      "from": "readable-stream@>=1.0.26 <1.1.0",
+      "from": "readable-stream@>=1.0.2 <1.1.0",
       "resolved": "https://registry.npmjs.org/readable-stream/-/readable-stream-1.0.34.tgz"
     },
     "reduce-component": {
@@ -1181,9 +1198,9 @@
       "resolved": "https://registry.npmjs.org/saucelabs/-/saucelabs-1.0.1.tgz"
     },
     "semver": {
-      "version": "1.1.4",
-      "from": "semver@>=1.1.4 <1.2.0",
-      "resolved": "https://registry.npmjs.org/semver/-/semver-1.1.4.tgz"
+      "version": "4.3.6",
+      "from": "semver@>=4.3.3 <4.4.0",
+      "resolved": "https://registry.npmjs.org/semver/-/semver-4.3.6.tgz"
     },
     "send": {
       "version": "0.13.0",
@@ -1325,8 +1342,7 @@
       "dependencies": {
         "isarray": {
           "version": "1.0.0",
-          "from": "isarray@>=1.0.0 <1.1.0",
-          "resolved": "https://registry.npmjs.org/isarray/-/isarray-1.0.0.tgz"
+          "from": "isarray@>=1.0.0 <1.1.0"
         },
         "readable-stream": {
           "version": "2.1.5",
@@ -1347,13 +1363,11 @@
       "dependencies": {
         "isarray": {
           "version": "1.0.0",
-          "from": "isarray@>=1.0.0 <1.1.0",
-          "resolved": "https://registry.npmjs.org/isarray/-/isarray-1.0.0.tgz"
+          "from": "isarray@>=1.0.0 <1.1.0"
         },
         "readable-stream": {
           "version": "2.0.6",
-          "from": "readable-stream@>=2.0.0 <2.1.0",
-          "resolved": "https://registry.npmjs.org/readable-stream/-/readable-stream-2.0.6.tgz"
+          "from": "readable-stream@>=2.0.0 <2.1.0"
         }
       }
     },
@@ -1363,9 +1377,9 @@
       "resolved": "https://registry.npmjs.org/tls/-/tls-0.0.1.tgz"
     },
     "tough-cookie": {
-      "version": "2.3.1",
+      "version": "2.3.2",
       "from": "tough-cookie@>=0.12.0",
-      "resolved": "https://registry.npmjs.org/tough-cookie/-/tough-cookie-2.3.1.tgz"
+      "resolved": "https://registry.npmjs.org/tough-cookie/-/tough-cookie-2.3.2.tgz"
     },
     "tunnel-agent": {
       "version": "0.4.3",
