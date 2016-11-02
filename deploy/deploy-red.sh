@@ -34,7 +34,7 @@ cf set-env "$RED" log4js_syslog_appender_product "$LOG4JS_SYSLOG_APPENDER_PRODUC
 cf set-env "$RED" log4js_syslog_appender_certificateBase64 "$LOG4JS_SYSLOG_APPENDER_CERTIFICATEBASE64"
 cf set-env "$RED" log4js_syslog_appender_privateKeyBase64 "$LOG4JS_SYSLOG_APPENDER_PRIVATEKEYBASE64"
 cf set-env "$RED" log4js_syslog_appender_caBase64 "$LOG4JS_SYSLOG_APPENDER_CABASE64"
-
+cf set-env "$RED" log4js_syslog_appender_url "$LOG4JS_SYSLOG_APPENDER_URL"
 cf set-env "$RED" log4js_logmet_enabled "$LOG4JS_LOGMET_ENABLED"
 cf set-env "$RED" log4js_logmet_component "$LOG4JS_LOGMET_COMPONENT"
 cf set-env "$RED" log4js_logmet_logging_token "$LOG4JS_LOGMET_LOGGING_TOKEN"
