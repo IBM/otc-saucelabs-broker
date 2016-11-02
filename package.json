@@ -1,10 +1,6 @@
 {
   "name": "otc-saucelabs-broker",
   "version": "1.0.0",
-  "engines": {
-    "node": "4.6.0",
-    "npm": "3.10.9"
-  },
   "repository": "https://github.ibm.com/org-ids/otc-saucelabs-broker.git",
   "license": "",
   "description": "Open Toolchain Saucelabs Broker",
