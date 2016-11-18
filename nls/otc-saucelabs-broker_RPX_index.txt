@@ -1,0 +1,12 @@
+00001	otc-saucelabs-broker/nls/msgs.properties	error.sauce_creds = 	Saucelabs credentials could not be verified
+00002	otc-saucelabs-broker/nls/msgs.properties	error.org_missing = 	Error: 'organization_guid' is a required parameter
+00003	otc-saucelabs-broker/nls/msgs.properties	error.usernamekey_missing = 	Could not validate parameters. 'username' and 'key' are required parameters
+00004	otc-saucelabs-broker/nls/msgs.properties	error.alreadybound = 	Toolchain {0} already bound to service instance {1}
+00005	otc-saucelabs-broker/nls/msgs.properties	error.failedtobind = 	Failed to bind toolchain {0} to service instance {1}
+00006	otc-saucelabs-broker/nls/msgs.properties	error.nosuchinstance = 	No such service instance: {0}
+00007	otc-saucelabs-broker/nls/msgs.properties	error.deletefail = 	Failed to delete service instance: {0}
+00008	otc-saucelabs-broker/nls/msgs.properties	error.unbindall = 	Failed to unbind all toolchains from service instance
+00009	otc-saucelabs-broker/nls/msgs.properties	error.notbound = 	No such bound toolchain: {0} for service instance {1}
+00010	otc-saucelabs-broker/nls/msgs.properties	error.unbind = 	Failed to unbind toolchain {0} to service instance {1}
+00011	otc-saucelabs-broker/nls/msgs.properties	error.database_write = 	Could not write to database
+00012	otc-saucelabs-broker/nls/msgs.properties	error.auth = 	An invalid authorization header was passed in
