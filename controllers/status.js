@@ -26,7 +26,7 @@ module.exports = function(req, res, next) {
         getSaucelabsServiceStatus(function(sauce){
             getCloudantServiceStatus(function(cloud){
                 var statusCode;
-                if (sauce.status === PASS && cloud.status === PASS){
+                if (cloud.status === PASS){
                     statusCode = PASSCODE;
                     status.status = PASS;
                     status.details = "Saucelabs broker running normally";
