@@ -15,6 +15,7 @@ var saucelabs = require("../util/saucelabs"),
 var PASS = "PASS",
     PASSCODE = 200,
     FAIL = "FAIL",
+    WARN = "WARN"
     FAILCODE = 500,
     sauce_error_count = 0,
     cloudant_error_count = 0;
@@ -26,14 +27,22 @@ module.exports = function(req, res, next) {
         getSaucelabsServiceStatus(function(sauce){
             getCloudantServiceStatus(function(cloud){
                 var statusCode;
-                if (cloud.status === PASS){
+                if (cloud.status === PASS && sauce.status === PASS) {
                     statusCode = PASSCODE;
                     status.status = PASS;
                     status.details = "Saucelabs broker running normally";
+                } else if (sauce.status === FAIL && cloud.status === PASS) {
+                    statusCode = PASSCODE;
+                    status.status = WARN;
+                    status.details = "SauceLabs API dependency failed";
+                } else if (cloud.status === FAIL && sauce.status === PASS) {
+                    statusCode = PASSCODE;
+                    status.status = WARN;
+                    status.details = "Cloudant dependency failed";
                 } else {
-                    statusCode = FAILCODE;
-                    status.status = FAIL;
-                    status.details = "One or more dependencies failed";
+                    statusCode = PASSCODE;
+                    status.status = WARN;
+                    status.details = "Cloudant and SauceLabs API dependencies failed";
                 }
 
                 status.dependencies = {
